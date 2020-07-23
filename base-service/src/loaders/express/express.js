@@ -5,8 +5,9 @@ const hpp = require('./packages/hpp');
 const xssClean = require('./packages/xss-clean');
 const contentLength = require('./packages/content-length');
 const rateLimiter = require('./packages/rate-limit');
-
 const morgan = require('./packages/morgan');
+
+const router = require('../../api/routes/router');
 
 module.exports = async () => {
   const app = express();
@@ -25,6 +26,9 @@ module.exports = async () => {
 
   // Logger package
   app.use(morgan.setupMorgan());
+
+  // Router
+  app.use(router());
 
   return app;
 };

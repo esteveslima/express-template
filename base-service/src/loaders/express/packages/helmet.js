@@ -6,6 +6,7 @@ exports.setupHelmet = () => {
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
+        scriptSrc: ["'self", "'unsafe-inline'", "'unsafe-eval'"],
       },
     },
     referrerPolicy: {
