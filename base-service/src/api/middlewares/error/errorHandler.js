@@ -1,3 +1,8 @@
+const winston = require('../../../helpers/log/winston');
+
+const errorsFileLogger = winston.loggers.get('errorsFileLogger');
+const errorsConsoleLogger = winston.loggers.get('errorsConsoleLogger');
+
 const ErrorResponse = require('./ErrorResponse');
 
 module.exports = (err, req, res, next) => {
@@ -17,9 +22,9 @@ module.exports = (err, req, res, next) => {
 
   // Logging for the error
   if (process.env.NODE_ENV !== 'production') {
-    console.error(`Detected Error [${errorResponse.error.errorCode}]. Result: ${JSON.stringify(errorResponse.result)}`);
+    errorsConsoleLogger.error(`Error Detected [${errorResponse.error.errorCode}]. Result: ${JSON.stringify(errorResponse.result)}`);
   } else if (process.env.LOGGING === 'true') {
-    // write log file with winston
+    errorsFileLogger.error(`Error Detected [${errorResponse.error.errorCode}]. Result: ${JSON.stringify(errorResponse.result)}`);
   }
 
   // Response based on the ErrorResponse object
