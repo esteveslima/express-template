@@ -11,7 +11,7 @@ module.exports = () => {
 
   // Custom 404 response
   router.all('*', (req, res) => {
-    res.status(404).send('404');
+    res.status(404).send('Route not found');
   });
 
   return router;

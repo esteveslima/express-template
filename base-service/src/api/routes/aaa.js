@@ -1,4 +1,5 @@
 const express = require('express');
+const aaa = require('../controllers/aaa');
 
 exports.joinRouter = (mainRouter) => {
   const aaaRouter = express.Router();
@@ -8,4 +9,6 @@ exports.joinRouter = (mainRouter) => {
   aaaRouter.post('/', (req, res) => res.send('post'));
   aaaRouter.put('/', (req, res) => res.send('put'));
   aaaRouter.delete('/', (req, res) => res.send('delete'));
+
+  aaaRouter.get('/test', aaa.controllerFunction);
 };

@@ -8,6 +8,7 @@ const rateLimiter = require('./packages/rate-limit');
 const morgan = require('./packages/morgan');
 
 const router = require('../../api/routes/router');
+const errorHandler = require('../../api/middlewares/error/errorHandler');
 
 module.exports = async () => {
   const app = express();
@@ -24,11 +25,14 @@ module.exports = async () => {
   app.use(contentLength.setupContentLenght());
   app.use(rateLimiter.setupRateLimit());
 
-  // Logger package
+  // Requests logger package
   app.use(morgan.setupMorgan());
 
   // Router
   app.use(router());
+
+  // Middleware error handler
+  app.use(errorHandler);
 
   return app;
 };

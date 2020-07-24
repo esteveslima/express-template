@@ -7,7 +7,7 @@ const setupServer = async () => {
   const app = await loader.load();
 
   const httpServer = http.createServer(app);
-  httpServer.listen(process.env.PORT_HTTP, () => console.log(`${process.env.NODE_ENV} HTTP server, running on port ${process.env.PORT_HTTP}`));
+  httpServer.listen(process.env.PORT, () => console.log(`${process.env.NODE_ENV} HTTP server, running on port ${process.env.PORT}`));
 
   /* const httpsCertificate = {
     key: fs.readFileSync('./src/resources/ssl-tls/certificate.key', 'utf-8'),
