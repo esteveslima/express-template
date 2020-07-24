@@ -5,8 +5,10 @@ exports.setupHelmet = () => {
     hsts: true,
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ["'self'"],
+        defaultSrc: ["'self'"/* , 'https://onlinebanking.jumbobank.com' */],
         scriptSrc: ["'self", "'unsafe-inline'", "'unsafe-eval'"],
+        styleSrc: ["'self'"],
+        imgSrc: ["'self'"],
       },
     },
     referrerPolicy: {
