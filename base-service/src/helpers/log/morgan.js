@@ -15,7 +15,7 @@ exports.setupMorgan = () => {
   // if logging, save to file
   const morganFormat = '[:date[iso]] - :status - ":method :url HTTP/:http-version" - :remote-addr - :remote-user - :total-time ms';
   const morganOptions = {
-    stream: fs.createWriteStream(path.join(__dirname, '../../../resources/logs/requests.log'), { flags: 'a' }),
+    stream: fs.createWriteStream(path.join(__dirname, '../../resources/logs/requests.log'), { flags: 'a' }),
   };
   return morgan(morganFormat, morganOptions);
 };
