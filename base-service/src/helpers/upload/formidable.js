@@ -12,7 +12,7 @@ exports.fileUpload = (req) => {
   };
   const form = formidable(formidableOptions);
 
-  // wrapping callback in a promisefor proper response
+  // wrapping callback in a promise for proper response
   return new Promise((resolve, reject) => {
     form.parse(req, (err/* , fields, files */) => {
       if (err) {

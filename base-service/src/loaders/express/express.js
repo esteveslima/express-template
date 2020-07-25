@@ -14,7 +14,7 @@ module.exports = async () => {
 
   // Body parser
   app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+  // app.use(express.urlencoded({ extended: true }));
 
   // Security packages
   app.use(cors.setupCors());
