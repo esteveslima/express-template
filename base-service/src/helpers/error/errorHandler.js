@@ -1,4 +1,4 @@
-const winston = require('../../../helpers/log/winston');
+const winston = require('../log/winston');
 
 const errorsFileLogger = winston.loggers.get('errorsFileLogger');
 const errorsConsoleLogger = winston.loggers.get('errorsConsoleLogger');
@@ -7,7 +7,8 @@ const ErrorResponse = require('./ErrorResponse');
 
 module.exports = (err, req, res, next) => {
   let errorResponse = { ...err };
-  // If not a ErrorResponse object, tests the error and assign to a proper ErrorResponse object
+  // If not a manually thrown ErrorResponse object...
+  // tests the error and assign to a proper ErrorResponse object
   if (!(err instanceof ErrorResponse)) {
     /* if (err) {
 

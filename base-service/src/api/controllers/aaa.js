@@ -1,6 +1,5 @@
-const asyncHandler = require('../middlewares/async/asyncHandler');
-const ErrorResponse = require('../middlewares/error/ErrorResponse');
-
+const asyncHandler = require('../../helpers/async/asyncHandler');
+const ErrorResponse = require('../../helpers/error/ErrorResponse');
 const formidable = require('../../helpers/upload/formidable.js');
 const nodemailer = require('../../helpers/email/nodemailer');
 
