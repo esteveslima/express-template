@@ -3,7 +3,6 @@ const cors = require('../../helpers/security/cors');
 const helmet = require('../../helpers/security/helmet');
 const hpp = require('../../helpers/security/hpp');
 const xssClean = require('../../helpers/security/xss-clean');
-const contentLength = require('../../helpers/security/content-length');
 const rateLimiter = require('../../helpers/security/rate-limit');
 const morgan = require('../../helpers/log/morgan');
 
@@ -22,7 +21,6 @@ module.exports = async () => {
   app.use(helmet.setupHelmet());
   app.use(xssClean.setupXssClean());
   app.use(hpp.setupHpp());
-  app.use(contentLength.setupContentLenght());
   app.use(rateLimiter.setupGeneralRateLimit());
 
   // Requests logger package
