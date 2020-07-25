@@ -10,7 +10,7 @@ module.exports = () => {
   bbbRouter.joinRouter(router);
 
   // Custom 404 response
-  router.all('*', (req, res) => {
+  router.all('*', (/* req, */ res /* , next */) => {
     res.status(404).send('Route not found');
   });
 

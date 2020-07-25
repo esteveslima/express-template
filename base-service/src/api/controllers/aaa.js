@@ -1,6 +1,14 @@
 const asyncHandler = require('../middlewares/async/asyncHandler');
 const ErrorResponse = require('../middlewares/error/ErrorResponse');
 
-exports.controllerFunction = asyncHandler(async (req, res) => {
-  throw new ErrorResponse(ErrorResponse.errorCodes.WRONG_PARAMETERS, 'result example');
+const formidable = require('../../helpers/upload/formidable.js');
+
+exports.fileUploadExample = asyncHandler(async (req, res, next) => {
+  await formidable.fileUpload(req);
+
+  res.json({ Status: true });
+});
+
+exports.emailExample = asyncHandler(async (req, res) => {
+
 });

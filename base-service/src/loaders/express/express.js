@@ -23,7 +23,7 @@ module.exports = async () => {
   app.use(xssClean.setupXssClean());
   app.use(hpp.setupHpp());
   app.use(contentLength.setupContentLenght());
-  app.use(rateLimiter.setupRateLimit());
+  app.use(rateLimiter.setupGeneralRateLimit());
 
   // Requests logger package
   app.use(morgan.setupMorgan());

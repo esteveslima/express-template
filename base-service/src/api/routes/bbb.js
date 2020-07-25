@@ -1,5 +1,7 @@
 const express = require('express');
 
+const bbb = require('../controllers/bbb');
+
 exports.joinRouter = (mainRouter) => {
   const bbbRouter = express.Router();
   mainRouter.use('/bbb', bbbRouter);
@@ -8,4 +10,7 @@ exports.joinRouter = (mainRouter) => {
   bbbRouter.post('/', (req, res) => res.send('post'));
   bbbRouter.put('/', (req, res) => res.send('put'));
   bbbRouter.delete('/', (req, res) => res.send('delete'));
+
+  bbbRouter.post('/registredErrorExample', bbb.registredErrorExample);
+  bbbRouter.post('/unregistredErrorExample', bbb.unregistredErrorExample);
 };
