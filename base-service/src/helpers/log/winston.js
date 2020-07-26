@@ -8,8 +8,13 @@ const errorsLogPath = 'src/resources/logs/errors.log';
 
 winston.loggers.add('errorsFileLogger', {
   format: combine(
-    label({ label: 'errorsFileLogger' }),
     json(),
+    format.timestamp(),
+    // format.printf((info) => `\n${info.timestamp} : ${info.level} : ${info.message}`),
+    format.printf((info) => JSON.stringify({
+      timestamp: info.timestamp,
+      message: info.message,
+    })),
   ),
   transports: [
     new winston.transports.File({
@@ -21,8 +26,16 @@ winston.loggers.add('errorsFileLogger', {
 
 winston.loggers.add('errorsConsoleLogger', {
   format: format.combine(
-    format.colorize(),
-    format.simple(),
+    format.colorize({
+      all: true,
+      colors: {
+        info: 'blue',
+        warning: 'yellow',
+        error: 'red',
+      },
+    }),
+    format.timestamp(),
+    format.printf((info) => `${info.level} : ${info.message}`),
   ),
   transports: [
     new winston.transports.Console({

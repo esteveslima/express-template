@@ -1,5 +1,5 @@
 const rateLimit = require('express-rate-limit');
-const ErrorResponse = require('../error/ErrorResponse');
+const ErrorResponse = require('../error/structure/error-response');
 
 module.exports.setupGeneralRateLimit = () => {
   const limiter = rateLimit({

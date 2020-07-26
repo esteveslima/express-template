@@ -7,7 +7,7 @@ const rateLimiter = require('../../helpers/security/rate-limit');
 const morgan = require('../../helpers/log/morgan');
 
 const router = require('../../api/routes/router');
-const errorHandler = require('../../helpers/error/errorHandler');
+const errorHandler = require('../../helpers/error/handler/error-handler');
 
 module.exports = async () => {
   const app = express();

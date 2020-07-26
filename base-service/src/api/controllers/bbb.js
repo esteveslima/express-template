@@ -1,5 +1,5 @@
-const asyncHandler = require('../../helpers/async/asyncHandler');
-const ErrorResponse = require('../../helpers/error/ErrorResponse');
+const asyncHandler = require('../../helpers/async/async-handler');
+const ErrorResponse = require('../../helpers/error/structure/error-response');
 
 exports.registredErrorExample = asyncHandler(async (req, res) => {
   throw new ErrorResponse(ErrorResponse.errorCodes.WRONG_PARAMETERS, 'registredErrorExample');
