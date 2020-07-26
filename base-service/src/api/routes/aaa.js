@@ -1,5 +1,5 @@
 const express = require('express');
-const aaaController = require('../controllers/aaa');
+const aaa = require('../controllers/aaa');
 
 const rateLimiter = require('../../helpers/security/rate-limit');
 
@@ -12,6 +12,6 @@ exports.joinToRouter = (mainRouter) => {
   aaaRouter.put('/', (req, res) => res.send('put'));
   aaaRouter.delete('/', (req, res) => res.send('delete'));
 
-  aaaRouter.post('/fileUploadExample', rateLimiter.setupFileUploadRateLimit(), aaaController.fileUploadExample);
-  aaaRouter.post('/emailExample', aaaController.emailExample);
+  aaaRouter.post('/fileUploadExample', rateLimiter.setupFileUploadRateLimit(), aaa.fileUploadExample);
+  aaaRouter.post('/emailExample', aaa.emailExample);
 };
