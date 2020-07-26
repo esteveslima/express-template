@@ -12,13 +12,16 @@ class ErrorResponse extends Error {
 ErrorResponse.errorCodes = errorCodes;
 
 ErrorResponse.parse = (err) => {
-  // If not a manually thrown ErrorResponse object...
-  // tests the error and parse to a proper ErrorResponse object
-  if (!(err instanceof ErrorResponse)) {
-    const errorCode = errorCodes.INTERNAL_SERVER_ERROR;
-    const errorResult = `${err}`;
+  if (err instanceof ErrorResponse) {
+    return { ...err };
+  }
 
-    /* if (err) {
+  // If it is not a manually thrown ErrorResponse object...
+  // tests the error and parse to a proper ErrorResponse object
+  const errorCode = errorCodes.INTERNAL_SERVER_ERROR;
+  const errorResult = `${err}`;
+
+  /* if (err) {
       errorCode = ;
       errorResult = ;
     } else if (err) {
@@ -27,9 +30,7 @@ ErrorResponse.parse = (err) => {
 
     } */
 
-    return new ErrorResponse(errorCode, errorResult);
-  }
-  return { ...err };
+  return new ErrorResponse(errorCode, errorResult);
 };
 
 module.exports = ErrorResponse;
