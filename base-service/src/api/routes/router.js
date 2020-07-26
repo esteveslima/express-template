@@ -6,8 +6,8 @@ module.exports = () => {
   const router = express.Router();
 
   // Assigning routes
-  aaaRouter.joinRouter(router);
-  bbbRouter.joinRouter(router);
+  aaaRouter.joinToRouter(router);
+  bbbRouter.joinToRouter(router);
 
   // Server status response
   router.get('/status', (req, res/* , next */) => {

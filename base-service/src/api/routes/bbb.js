@@ -2,7 +2,7 @@ const express = require('express');
 
 const bbb = require('../controllers/bbb');
 
-exports.joinRouter = (mainRouter) => {
+exports.joinToRouter = (mainRouter) => {
   const bbbRouter = express.Router();
   mainRouter.use('/bbb', bbbRouter);
 
