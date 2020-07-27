@@ -1,9 +1,9 @@
-const dotenv = require('dotenv');
+const dotenv = require('../helpers/dotenv/dotenv');
 const expressLoader = require('./express/express');
 
 exports.load = async () => {
   // Envirnoment Variables
-  dotenv.config({ path: `${__dirname}/./../config/.env` });
+  dotenv.setupDotenv();
 
   // Load Express with its packages
   const expressApp = expressLoader();

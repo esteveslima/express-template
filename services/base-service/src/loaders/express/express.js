@@ -9,7 +9,7 @@ const morgan = require('../../helpers/log/morgan');
 const router = require('../../api/routes/router');
 const errorHandler = require('../../helpers/error/handler/error-handler');
 
-module.exports = async () => {
+module.exports = () => {
   const app = express();
 
   // Body parser
