@@ -21,14 +21,22 @@ ErrorResponse.parse = (err) => {
   const errorCode = errorCodes.INTERNAL_SERVER_ERROR;
   const errorResult = `${err}`;
 
-  /* if (err) {
-      errorCode = ;
-      errorResult = ;
-    } else if (err) {
+  if (err.name === 'MongoError') {
+    switch (err.code) {
+      case 11000: {
+        /* errorCode = ;
+        errorResult = ; */
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  } else if (err) {
 
-    } else if (err) {
+  } else if (err) {
 
-    } */
+  }
 
   return new ErrorResponse(errorCode, errorResult);
 };

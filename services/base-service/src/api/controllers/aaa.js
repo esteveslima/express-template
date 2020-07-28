@@ -3,10 +3,10 @@ const ErrorResponse = require('../../helpers/error/structure/error-response');
 const formidable = require('../../helpers/upload/formidable.js');
 const nodemailer = require('../../helpers/email/nodemailer');
 
-exports.fileUploadExample = async (req, res) => {
-  await formidable.fileUpload(req);
+exports.imageUploadExample = async (req, res) => {
+  const uploadResult = await formidable.fileUpload(req);
 
-  res.json({ Status: true });
+  res.json({ Status: true, uploadResult });
 };
 
 exports.emailExample = async (req, res) => {

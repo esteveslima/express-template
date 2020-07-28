@@ -9,6 +9,8 @@ exports.getUser = async (req, res) => {
 
   const user = await UserModel.findById(userId);
 
+  if (!user) throw new ErrorResponse(ErrorResponse.errorCodes.NOT_FOUND, user);
+
   res.status(200).json({ user });
 };
 

@@ -52,16 +52,33 @@ const UserSchema = new mongoose.Schema({
     maxlength: [150, 'Last Name max length = 150'],
     minLength: [2, 'Last Name min length = 2'],
   },
+  phone: {
+    type: String,
+    required: [true, 'Phone required'],
+    trim: true,
+    maxlength: [15, 'Phone max length = 15'],
+    minLength: [10, 'Phone min length = 10'],
+    validate: {
+      // Regex phone(BR) format
+      validator: (input) => /\(?\d{2}\)?\s?\d{4,5}\-?\d{4}/g.test(input),
+      message: (input) => `${input.value.length} is not a valid phone(BR)`,
+    },
+    set: (input) => {
+      // Modify the input to a proper format
+      const rawInput = input.replace(/[^\w]/gi, '');
+      return `(${rawInput.slice(0, 2)}) ${rawInput.slice(2, 7)}-${rawInput.slice(7)}`;
+    },
+  },
   bithDate: {
     type: Date,
-    required: true,
+    required: [true, 'Birth date required'],
     trim: true,
     max: Date.now,
   },
   gender: {
     type: String,
     enum: ['male', 'female', 'undefined'],
-    required: true,
+    required: [true, 'Gender required'],
     trim: true,
   },
   personalId: {
@@ -69,10 +86,17 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Personal Id required'],
     unique: true,
     trim: true,
+    maxlength: [14, 'Personal Id max length = 14'],
+    minLength: [9, 'Personal Id min length = 9'],
     validate: {
       // Regex 'cpf' format
-      validator: (input) => /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/.test(input),
-      message: (input) => `${input.value} is not a valid personal id`,
+      validator: (input) => /^\d{3}\.?\d{3}\.?\d{3}\-?\d{2}$/.test(input),
+      message: (input) => `${input.value} is not a valid personal id(cpf)`,
+    },
+    set: (input) => {
+      // Modify the input to a proper format
+      const rawInput = input.replace(/[^\w]/gi, '');
+      return `${rawInput.slice(0, 3)}.${rawInput.slice(3, 6)}.${rawInput.slice(6, 9)}-${rawInput.slice(9)}`;
     },
   },
   pictureUrl: {
