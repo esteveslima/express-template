@@ -8,7 +8,6 @@ class ErrorResponse extends Error {
     this.result = result;
   }
 }
-
 ErrorResponse.errorCodes = errorCodes;
 
 ErrorResponse.parse = (err) => {
@@ -17,23 +16,29 @@ ErrorResponse.parse = (err) => {
   }
 
   // If it is not a manually thrown ErrorResponse object...
-  // tests the error and parse to a proper ErrorResponse object
-  const errorCode = errorCodes.INTERNAL_SERVER_ERROR;
+  // ...tests the error and parse to a proper ErrorResponse object
+  // May replace generic responses words to cover all fields
+  let errorCode = { ...errorCodes.INTERNAL_SERVER_ERROR };
   const errorResult = `${err}`;
 
   if (err.name === 'MongoError') {
     switch (err.code) {
       case 11000: {
-        /* errorCode = ;
-        errorResult = ; */
+        errorCode = { ...errorCodes.DUPLICATED_KEY };
+        const field = Object.keys(err.keyValue)[0];
+        errorCode.message = errorCode.message.replace(/\b(field)\b/gi, field);
         break;
       }
       default: {
         break;
       }
     }
-  } else if (err) {
-
+  } else if (err.name === 'ValidationError') {
+    errorCode = { ...errorCodes.INVALID_FIELD };
+    const validationMessage = err.errors[Object.keys(err.errors)[0]].properties ? err.errors[Object.keys(err.errors)[0]].properties.message : '';
+    const field = err.errors[Object.keys(err.errors)[0]].path;
+    const input = err.errors[Object.keys(err.errors)[0]].value;
+    errorCode.message = `${errorCode.message.replace(/\b(field)\b/gi, field).replace(/\b(value)\b/gi, input)} ${validationMessage}`;
   } else if (err) {
 
   }

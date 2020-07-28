@@ -8,4 +8,9 @@ module.exports = {
   EXCESSIVE_PAYLOAD: { errorCode: 1005, httpCode: 429, message: 'Excessive request payload, please check the request' },
   UPLOAD_FAILURE: { errorCode: 1005, httpCode: 429, message: 'Failed to upload files, please check the request files' },
 
+  // Mongoose errors
+  // generic response which may have strategic words(field and value) replaced for dynamic responses
+  DUPLICATED_KEY: { errorCode: 2000, httpCode: 400, message: 'This field already exists, please provide another valid field.' },
+  INVALID_FIELD: { errorCode: 2001, httpCode: 400, message: 'Invalid field \'value\', please check the request and field.' },
+
 };
