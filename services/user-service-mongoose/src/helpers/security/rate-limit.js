@@ -1,7 +1,7 @@
 const rateLimit = require('express-rate-limit');
 const ErrorResponse = require('../error/structure/error-response');
 
-module.exports.setupCustomRateLimit = (requestsNumber, timeWindow) => {
+exports.setupCustomRateLimit = (requestsNumber, timeWindow) => {
   const limiter = rateLimit({
     windowMs: timeWindow * 60 * 1000,
     max: requestsNumber,
@@ -12,7 +12,7 @@ module.exports.setupCustomRateLimit = (requestsNumber, timeWindow) => {
   return limiter;
 };
 
-module.exports.setupGeneralRateLimit = () => {
+exports.setupGeneralRateLimit = () => {
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // limit each IP to 100 requests per windowMs
@@ -23,7 +23,7 @@ module.exports.setupGeneralRateLimit = () => {
   return limiter;
 };
 
-module.exports.setupFileUploadRateLimit = () => {
+exports.setupFileUploadRateLimit = () => {
   const limiter = rateLimit({
     windowMs: 1 * 60 * 1000,
     max: 5,
@@ -34,7 +34,7 @@ module.exports.setupFileUploadRateLimit = () => {
   return limiter;
 };
 
-module.exports.setupRestorePasswordRateLimit = () => {
+exports.setupRestorePasswordRateLimit = () => {
   const limiter = rateLimit({
     windowMs: 10 * 60 * 1000,
     max: 5,

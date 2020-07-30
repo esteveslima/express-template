@@ -4,6 +4,7 @@ const helmet = require('../../helpers/security/helmet');
 const hpp = require('../../helpers/security/hpp');
 const xssClean = require('../../helpers/security/xss-clean');
 const rateLimiter = require('../../helpers/security/rate-limit');
+const sanitizer = require('../../helpers/security/mongo-sanitize');
 const morgan = require('../../helpers/log/morgan');
 
 const router = require('../../api/routes/router');
@@ -22,6 +23,8 @@ module.exports = () => {
   app.use(xssClean.setupXssClean());
   app.use(hpp.setupHpp());
   app.use(rateLimiter.setupGeneralRateLimit());
+  // Input sanitizer validator
+  app.use(sanitizer.setupMongoSanitizer());
 
   // Requests logger package
   app.use(morgan.setupMorgan());
