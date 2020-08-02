@@ -1,0 +1,589 @@
+{
+	"info": {
+		"_postman_id": "68fbc105-76b5-4ec0-a90c-98c1f54c416e",
+		"name": "express-template",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "base-service",
+			"item": [
+				{
+					"name": "aaa/imageUploadExample",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "wq",
+									"type": "file",
+									"src": "/home/esteveslima/Projects/Honeywell/cas-smart-market-services/helpers/assets/honeywell_logo.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/aaa/imageUploadExample",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aaa",
+								"imageUploadExample"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aaa/emailExample",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/aaa/emailExample",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aaa",
+								"emailExample"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bbb/unregistredErrorExample",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bbb/unregistredErrorExample",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bbb",
+								"unregistredErrorExample"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bbb/registredErrorExample",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bbb/registredErrorExample",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bbb",
+								"registredErrorExample"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "user-service-mongoose",
+			"item": [
+				{
+					"name": "user/create",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\": \"\",\n    \"password\": \"\",\n    \"email\": \"\",\n    \"name\": \"\",\n    \"lastName\": \"\",\n    \"phone\": \"\",\n    \"birthDate\": \"\",\n    \"gender\": \"\",\n    \"personalId\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}:8080/user/public/create",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"public",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/pictureUpload",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}:8080/user/pictureUpload",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"pictureUpload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/getPicture",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}:8080/user/getPicture",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"getPicture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"\",\n    \"name\": \"\",\n    \"lastName\": \"\",\n    \"phone\": \"\",\n    \"birthDate\": \"\",\n    \"gender\": \"\",\n    \"personalId\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}:8080/user/update/:userName",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"update",
+								":userName"
+							],
+							"variable": [
+								{
+									"key": "userName",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}:8080/user/get/:userName",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"get",
+								":userName"
+							],
+							"variable": [
+								{
+									"key": "userName",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}:8080/user/delete/:userName",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"delete",
+								":userName"
+							],
+							"variable": [
+								{
+									"key": "userName",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d7b83c56-73c9-4221-9f65-d6bba4825df7",
+								"exec": [
+									"pm.environment.set('TOKEN', pm.response.json().token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\": \"\",\n    \"password\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}:8080/auth/public/login",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"public",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/forgotPassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "288533ee-9bdb-40ae-81dd-0bcd21ac5249",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}:8080/auth/public/forgotPassword",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"public",
+								"forgotPassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/restorePassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ca72ecc6-ac45-4105-a242-f84d582a8a9f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"\",\n    \"newPassword\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}:8080/auth/public/restorePassword",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"public",
+								"restorePassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/changePassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3691d26-10e1-47e3-b000-29844ef1e2bc",
+								"exec": [
+									"pm.environment.set('TOKEN', pm.response.json().token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"\",\n    \"newPassword\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}:8080/user/changePassword",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"changePassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c8f0b223-b31d-47c0-9f70-6f10729f0d7c",
+								"exec": [
+									"pm.environment.set('TOKEN', pm.response.json().token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}:8080/auth/logout",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

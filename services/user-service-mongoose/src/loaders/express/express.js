@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('../../helpers/parser/cookie-parser');
 const cors = require('../../helpers/security/cors');
 const helmet = require('../../helpers/security/helmet');
 const hpp = require('../../helpers/security/hpp');
@@ -16,6 +17,8 @@ module.exports = () => {
   // Body parser
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  // Cookie parser
+  app.use(cookieParser.setupCookieParser());
 
   // Security packages
   app.use(cors.setupCors());

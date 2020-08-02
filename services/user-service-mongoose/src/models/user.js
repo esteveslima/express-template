@@ -2,16 +2,16 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
-  login: {
+  userName: {
     type: String,
-    required: [true, 'Login required'],
+    required: [true, 'userName required'],
     select: false,
     unique: true,
     trim: true,
-    maxlength: [30, 'Login max length = 30'],
-    minlength: [5, 'Login min length = 5'],
+    maxlength: [30, 'userName max length = 30'],
+    minlength: [5, 'userName min length = 5'],
     validate: {
-      // Regex to validate login characters
+      // Regex to validate userName characters
       validator: (input) => /^[a-zA-Z][a-zA-Z\-_.0-9]*$/g.test(input),
       message: () => 'Expected only numbers and letters(also allowed: \'.\', \'_\', \'-\')',
     },
@@ -110,17 +110,22 @@ const UserSchema = new mongoose.Schema({
       return `${rawInput.slice(0, 3)}.${rawInput.slice(3, 6)}.${rawInput.slice(6, 9)}-${rawInput.slice(9)}`;
     },
   },
-  pictureUrl: {
-    type: String,
-    trim: true,
-  },
 });
 
+// Encrypt function
+const encrypt = async (payload) => {
+  const saltRounds = 10;
+  const hash = await bcrypt.hash(payload, saltRounds);
+  return hash;
+};
 // Encrypting password before storing
 UserSchema.pre('save', async function encryptPassword() {
-  const saltRounds = 10;
-  const hash = await bcrypt.hash(this.password, saltRounds);
-  this.password = hash;
+  if (this.isModified('password')) this.password = await encrypt(this.password);
 });
+
+// Object method for comparing encrypted passwords
+UserSchema.methods.checkPassword = function comparePasswords(password) {
+  return bcrypt.compare(password, this.password);
+};
 
 module.exports = mongoose.model('User', UserSchema);

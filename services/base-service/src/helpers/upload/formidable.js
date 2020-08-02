@@ -1,12 +1,20 @@
 const formidable = require('formidable');
 const path = require('path');
+const fs = require('fs');
 const ErrorResponse = require('../error/structure/error-response');
 
-const fileUploadPath = path.join(__dirname, '../../resources/uploads');
+const createFolder = (folderPath) => {
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath);
+  }
+  return folderPath;
+};
 
-exports.fileUpload = (req) => {
+exports.fileUploadPath = path.join(__dirname, '../../resources/uploads');
+
+exports.fileUpload = (payload, fileName = Date.now()) => {
   const formidableOptions = {
-    uploadDir: fileUploadPath,
+    uploadDir: this.fileUploadPath,
     multiples: false,
     keepExtensions: false,
     maxFileSize: 10 * 1024 * 1024, // 10MB
@@ -15,28 +23,33 @@ exports.fileUpload = (req) => {
 
   // Validate allowed file types and names and separate rejected ones for response
   const mimeTypesWhiteList = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
-  const regexBlackList = /[.:;#$&%@!{}'"\\\/*`><|\?]/g;
-  const filesAccepted = [];
-  const filesRejected = [];
+  const charactersBlackList = /[.:;#$&%@!{}'"\\\/*`><|\?]/g;
   form.onPart = (part) => {
-    const fileName = part.filename.slice(0, part.filename.lastIndexOf('.'));
-    const isFileNameInvalid = fileName.match(regexBlackList);
-    if (mimeTypesWhiteList.includes(part.mime) && !isFileNameInvalid) {
-      filesAccepted.push(part.filename);
+    const uploadedFileName = part.filename.slice(0, part.filename.lastIndexOf('.'));
+    const isFileNameValid = !uploadedFileName.match(charactersBlackList);
+    if (mimeTypesWhiteList.includes(part.mime) && isFileNameValid) {
       form.handlePart(part);
-    } else {
-      filesRejected.push(part.filename);
     }
   };
 
   // wrapping callback in a promise for proper response
   return new Promise((resolve, reject) => {
-    form.parse(req, (err/* , fields, files */) => {
+    form.parse(payload, (err, fields, files) => {
       if (err) reject(err);
-      if (filesAccepted.length === 0) {
-        reject(new ErrorResponse(ErrorResponse.errorCodes.UPLOAD_FAILURE, { filesRejected }));
+      const filesAccepted = Object.keys(files);
+      if (!filesAccepted.length) {
+        reject(new ErrorResponse(ErrorResponse.errorCodes.UPLOAD_FAILURE, { fileName }));
       }
-      resolve({ filesAccepted, filesRejected });
+
+      // Renaming accepted files
+      filesAccepted.forEach((file) => {
+        const clientIp = payload.headers['x-forwarded-for'] || payload.connection.remoteAddress;
+        const folder = createFolder(`${form.uploadDir}/${clientIp}`);
+        const name = form.multiples ? Date.now() : fileName;
+        fs.rename(files[file].path, `${folder}/${name}`, (errr) => reject(errr));
+      });
+
+      resolve({ filesAccepted });
     });
   });
 };

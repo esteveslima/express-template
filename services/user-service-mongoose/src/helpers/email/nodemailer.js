@@ -4,16 +4,14 @@
 const nodemailer = require('nodemailer');
 // const fs = require('fs');
 
-exports.sendEmailTo = (targetEmail) => {
+exports.sendEmailTo = (targetEmail, data) => {
   const mailAccountUser = process.env.EMAIL;
   const mailAccountPassword = process.env.EMAIL_PASS;
   const fromEmailAddress = mailAccountUser;
   const toEmailAddress = targetEmail;
 
-  const mailSubject = 'Email subject';
-
   const transport = nodemailer.createTransport({
-    service: 'gmail',
+    service: 'hotmail',
     tls: { rejectUnauthorized: false },
     auth: {
       user: mailAccountUser,
@@ -21,8 +19,7 @@ exports.sendEmailTo = (targetEmail) => {
     },
   });
 
-  // Could load html file with fs.readFileSync and use .replace() on dynamic data
-  const mailBody = 'Default email message, which also could be HTML';
+  const { mailSubject, mailBody } = data;
 
   const mail = {
     from: `SENDER <${fromEmailAddress}>`,

@@ -1,13 +1,19 @@
 const express = require('express');
 const userRouter = require('./user');
-const bbbRouter = require('./bbb');
+const authRouter = require('./auth');
+
+const jwtAuth = require('../../helpers/auth/jwt');
+const adjustMiddleware = require('../middlewares/adjust-request');
 
 module.exports = () => {
   const router = express.Router();
 
+  // Router authorization middleware, for routes not marked as public
+  router.all(/^((?!\/public\/).)*$/i, jwtAuth.authorization, adjustMiddleware.appendUser);
+
   // Assigning routes
   userRouter.joinToRouter(router);
-  bbbRouter.joinToRouter(router);
+  authRouter.joinToRouter(router);
 
   // Server status response
   router.get('/status', (req, res/* , next */) => {

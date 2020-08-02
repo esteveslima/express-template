@@ -1,17 +1,18 @@
 const express = require('express');
 const user = require('../controllers/user');
-
+const validateMiddleware = require('../middlewares/validate-request');
 const rateLimiter = require('../../helpers/security/rate-limit');
 
 exports.joinToRouter = (mainRouter) => {
   const userRouter = express.Router();
   mainRouter.use('/user', userRouter);
 
-  userRouter.get('/get/:id', user.getUser);
-  userRouter.post('/create', user.createUser);
-  userRouter.put('/update/:id', user.updateUser);
-  userRouter.delete('/delete/:id', user.deleteUser);
+  userRouter.get('/get/:userName', user.getUser);
+  userRouter.post('/public/create', user.createUser);
+  userRouter.put('/update/:userName', validateMiddleware.validateUsername, user.updateUser);
+  userRouter.delete('/delete/:userName', validateMiddleware.validateUsername, user.deleteUser);
 
   userRouter.post('/pictureUpload', rateLimiter.setupFileUploadRateLimit(), user.pictureUpload);
-  userRouter.post('/restorePassword', rateLimiter.setupRestorePasswordRateLimit(), user.restorePassword);
+  userRouter.get('/getPicture', rateLimiter.setupFileUploadRateLimit(), user.getPicture);
+  userRouter.post('/changePassword', rateLimiter.setupRestorePasswordRateLimit(), user.changePassword);
 };
