@@ -4,7 +4,7 @@ const daoFileLogger = winston.loggers.get('daoFileLogger');
 
 // Logging Dao
 const logDaoFunction = ({ functionName, parameters, functionResult }) => {
-  if (process.env.NODE_ENV !== 'production' || process.env.LOGGING !== 'true') return;
+  // if (process.env.NODE_ENV !== 'production' || process.env.LOGGING !== 'true') return;
 
   const functionText = {
     name: functionName,
@@ -42,14 +42,15 @@ exports.wrapDaoLogger = (tracedFunctions) => {
   Object.keys(tracedFunctionsObject).forEach((functionName) => {
     tracedFunctionsObject[functionName] = (function wrapTraced(tracedFunction) {
       return async function traced() {
-        const parametersNames = getParamNames(tracedFunction);
-        const parametersValues = Object.values(arguments);
-        const parameters = {};
-        parametersNames.forEach((name, index) => { parameters[name] = parametersValues[index]; });
-
         const functionResult = await tracedFunction.apply(this, arguments);
 
-        logDaoFunction({ functionName, parameters, functionResult });
+        if (process.env.NODE_ENV === 'production' && process.env.LOGGING === 'true') {
+          const parametersNames = getParamNames(tracedFunction);
+          const parametersValues = Object.values(arguments);
+          const parameters = {};
+          parametersNames.forEach((name, index) => { parameters[name] = parametersValues[index]; });
+          logDaoFunction({ functionName, parameters, functionResult });
+        }
 
         return functionResult;
       };
