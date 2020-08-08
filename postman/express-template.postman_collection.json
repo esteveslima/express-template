@@ -17,17 +17,17 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "wq",
+									"key": "file",
 									"type": "file",
-									"src": ""
+									"src": []
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/aaa/imageUploadExample",
+							"raw": "http://{{DOMAIN}}:8080/aaa/imageUploadExample",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{DOMAIN}}"
 							],
 							"port": "8080",
 							"path": [
@@ -44,10 +44,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/aaa/emailExample",
+							"raw": "http://{{DOMAIN}}:8080/aaa/emailExample",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{DOMAIN}}"
 							],
 							"port": "8080",
 							"path": [
@@ -64,10 +64,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/bbb/unregistredErrorExample",
+							"raw": "http://{{DOMAIN}}:8080/bbb/unregistredErrorExample",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{DOMAIN}}"
 							],
 							"port": "8080",
 							"path": [
@@ -84,10 +84,10 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/bbb/registredErrorExample",
+							"raw": "http://{{DOMAIN}}:8080/bbb/registredErrorExample",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{DOMAIN}}"
 							],
 							"port": "8080",
 							"path": [
