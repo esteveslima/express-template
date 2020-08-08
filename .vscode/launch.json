@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",                 
+            "request": "attach",            //  attach to running...
+            "protocol": "inspector",        //...inspector process(scripts.dev)
+            "restart": true,                //  necessary for nodemon
+            "name": "Nodemon",              //  With the above modification on default node debug configuration...
+            "skipFiles": [                  //...should be possible to start debug mode attaching to scripts.dev(--inspect)...
+                "<node_internals>/**"       //...and debug using breakpoints in addition to nodemon
+            ],
+            "program": "${workspaceFolder}/index.js"
+        }
+    ]
+}
