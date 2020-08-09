@@ -16,6 +16,7 @@ module.exports = (err, req, res, next) => {
       column: lastTrace ? lastTrace.getColumnNumber() : '?',
     },
   };
+  const user = req.user ? req.user._id : '?';
 
   // Maps the error and parses it to an appropriate ErrorResponse object, if it is not already
   const errorResponse = ErrorResponse.parse(err);
@@ -23,7 +24,7 @@ module.exports = (err, req, res, next) => {
   // Logging the ErrorResponse object
   const clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   const message = `
-    Error: [${errorResponse.error.errorCode}] from client [${clientIp}].
+    Error: [${errorResponse.error.errorCode}] from client [${clientIp}] user [${user}].
     Result: [${JSON.stringify(errorResponse.result)}].
     Position [row,col] = [${trace.position.line},${trace.position.column}] from file [${trace.file}].
     Function: [${trace.function}]`;
