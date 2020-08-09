@@ -56,7 +56,9 @@ exports.fileUpload = (payload, userName) => {
 
 exports.findUploadedPicture = (userName) => {
   const userFolder = `${fileUploadPath}/${userName}`;
-
+  if (!fs.existsSync(userFolder)) {
+    throw new ErrorResponse(ErrorResponse.errorCodes.NOT_FOUND, { userName });
+  }
   // wrapping callback
   return new Promise((resolve, reject) => {
     // List files in the directory to check the picture file

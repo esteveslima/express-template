@@ -9,7 +9,7 @@ const sanitizer = require('../../helpers/security/mongo-sanitize');
 const morgan = require('../../helpers/log/morgan');
 
 const router = require('../../api/routes/router');
-const errorHandler = require('../../helpers/error/handler/error-handler');
+const errorHandler = require('../../helpers/error/error-handler');
 
 module.exports = () => {
   const app = express();
