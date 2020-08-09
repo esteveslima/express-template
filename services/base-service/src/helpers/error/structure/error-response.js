@@ -21,14 +21,20 @@ ErrorResponse.parse = (err) => {
   const errorCode = errorCodes.INTERNAL_SERVER_ERROR;
   const errorResult = `${err}`;
 
-  /* if (err) {
-      errorCode = ;
-      errorResult = ;
-    } else if (err) {
+  /* switch (true) {
+    case (err.name === ''): {
 
-    } else if (err) {
+      break;
+    }
+    case (err.name === ' '): {
 
-    } */
+      break;
+    }
+    default: {
+      errorCode = { ...errorCodes.INTERNAL_SERVER_ERROR };
+      errorResult = `${err}`;
+    }
+  } */
 
   return new ErrorResponse(errorCode, errorResult);
 };
