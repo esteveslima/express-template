@@ -48,7 +48,7 @@ exports.forgotPassword = async (req, res) => {
 
   // 1 hour valid jwt, identified by user email(unique)...
   // ...that can only be verified with requests from the same device(ip address)
-  const token = jwtAuth.generateToken({ payload: email, secret: ipAddress });
+  const token = jwtAuth.generateToken({ payload: email, secret: `${ipAddress} ${email}` });
 
   const mailData = {
     mailSubject: 'Restore Password',
@@ -67,14 +67,14 @@ exports.restorePassword = async (req, res) => {
 
   const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-  // Verify if the token is being used with the same device(ip address) within expiration time
-  const decodedToken = jwtAuth.verifyToken({ token, secret: ipAddress });
-
-  if (decodedToken instanceof ErrorResponse) throw decodedToken;
-
+  const decodedToken = jwtAuth.decodeToken(token);
   const userEmail = decodedToken.payload;
-  const user = await userDao.findUserByEmail(userEmail);
 
+  // Verify if the token is being used with the same email and device(ip address) within expiration
+  const verifiedToken = jwtAuth.verifyToken({ token, secret: `${ipAddress} ${userEmail}` });
+  if (verifiedToken instanceof ErrorResponse) throw verifiedToken;
+
+  const user = await userDao.findUserByEmail(userEmail);
   if (!user) throw new ErrorResponse(ErrorResponse.errorCodes.NOT_FOUND, { userEmail });
 
   const { userName } = user;

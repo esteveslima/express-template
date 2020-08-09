@@ -99,19 +99,18 @@
 					"response": []
 				},
 				{
-					"name": "public/status",
+					"name": "/status",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/public/status",
+							"raw": "http://localhost:8080/status",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"public",
 								"status"
 							]
 						}

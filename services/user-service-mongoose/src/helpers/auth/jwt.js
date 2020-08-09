@@ -41,7 +41,17 @@ exports.generateToken = ({ payload, secret = process.env.JWT_SECRET }) => {
 // Used to verify 'restore password' token
 exports.verifyToken = ({ token, secret = process.env.JWT_SECRET }) => {
   try {
-    const decodedToken = jwt.verify(token, secret);
+    const verifiedToken = jwt.verify(token, secret);
+    return verifiedToken;
+  } catch (e) {
+    return new ErrorResponse(ErrorResponse.errorCodes.NOT_FOUND, token);
+  }
+};
+// Decode arbitrary jwt, without verifying
+// Used to get user email in 'restore password' token payload
+exports.decodeToken = (token) => {
+  try {
+    const decodedToken = jwt.decode(token);
     return decodedToken;
   } catch (e) {
     return new ErrorResponse(ErrorResponse.errorCodes.NOT_FOUND, token);
