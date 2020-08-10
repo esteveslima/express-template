@@ -52,7 +52,7 @@ This project try to illustrate some usual structures, features and applications 
   
     - ***Contain simple examples***: simple examples covering routing and controllers(upload and email examples, in addition to errors demonstration);    
     - ***HTTPS Structure***: Structure provided, ~~but not in use~~, alongside http server at `index.js`;
-      - **Todo**: Understand better the generation of valid ssl certificates(self signed certificates using letsencrypt).
+      - ~~***TODO***~~: Understand better the generation of valid ssl certificates(self signed certificates using letsencrypt).
     - ***Decoupled packages***: they are simply imported and used, all it's configurations are made within a proper file at `/src/helpers/`;
     - ***Loader structure***: a more modular way to import and setup modules at `/src/loaders/`, which are imported at `index.js` before setup servers and start listening;
     - ***3 layer architecture***: clear separation of routing, business logic in controllers and data access in dao with their models. Middlewares added to provide request adjust and validation;
@@ -64,16 +64,16 @@ This project try to illustrate some usual structures, features and applications 
     - ***Standartized errors***: possibility to structure error responses at file `/src/helpers/error/structure/error-codes.js` and call them manually. Also possible to test unexpected errors at file `/src/helpers/error/structure/error-response.js` in runtime and build a proper error response;
     - ***Easy async handling***: drying code with async handler at file `/src/helpers/async/async-handler.js` dispensing the use of try/catch blocks in async functions at files like `/src/api/controllers/*`. Using function at `/src/helpers/async/wrap-async.js` it's possible to wrap async handler in every function within file;
     - ***Security***: few packages like [cors], [helmet], [hpp], [express-rate-limit], [xss-clean] to apply some security with headers or as middleware at file `/src/helpers/security/*`;
-      - **Todo**: Understand better these security headers for proper integration with front-end applications and servers like Nginx.
+      - ~~***TODO***~~: Understand better these security headers for proper integration with front-end applications and servers like Nginx.
     - ***Email template***: simple email example using [nodemailer] at `/src/helpers/email/nodemailer.js` which can be improved to send customized html emails with dynamic data;
-    - ***Upload template***: simple upload example using [formidable] at `/src/helpers/upload/formidable.js` which can be improved to support multiple files in custom directories. Currently able to validate uploaded files names and MIMEs, separating them as accepted or rejected;    
-  
+    - ***Upload template***: simple upload example using [formidable] at `/src/helpers/upload/formidable.js` which can be improved to support multiple files in custom directories. Currently able to validate uploaded files names and MIMEs, separating them as accepted or rejected;  
+    
   
   
   <br/><br/>
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/MongoDB_Logo.svg/220px-MongoDB_Logo.svg.png" width="auto" height="32px">
-  
-  - **user-service-mongoose**: Example service using MongoDB alongside [mongoose] for user data manipulation, authentication and authorization.
+
+  - **user-service-mongoose**: Example service using ***MongoDB*** alongside [mongoose] for user data manipulation, authentication and authorization.
   
     - ***Middlewares usage demonstration***: usability example of middlewares for request handling at `/src/api/middlewares/*`;
     - ***Dao usage demonstration***: usability of dao at `/src/database/dao/*`, which should only access the ODM/ORM model to manipulate/search data and leave business logic to the controllers;
@@ -81,23 +81,25 @@ This project try to illustrate some usual structures, features and applications 
     - ***Mongodb connection with mongoose***: connection example at `/src/loaders/mongoose/mongoose.js`, which also could connect to a local mongodb;
     - ***Mongoose model***: mongoose user model at `/src/models/*` with useful examples for validation using regex and data transforming. Schema middleware example used for password encryption using [bcrypt] before storing in database. Schema methods definition example used for validate incoming passwords, encrypting them and comparing;
     - ***Custom mongoose errors handling***: testing unexpected mongoose errors at `/src/helpers/error/structure/error-response.js` and providing proper reponses with new registred errors at `/src/helpers/error/structure/error-codes.js` that are modified to provide dynamic feedback of with which field/value the error was triggered;
-    - ***Mongo input sanitize***: added package [express-mongo-sanitize] that provides extra security for mongoose, disabling inputs with forbidden characters that leads to ;
+    - ***Mongo input sanitize***: added package [express-mongo-sanitize] that provides extra security for mongoose, disabling inputs with forbidden characters;
     - ***Authentication/Authorization using tokens***: auth made with [jsonwebtoken] package at `/src/helpers/auth/jwt.js` using configuration at `/src/config/.env` file. The authentication is made through login/logout function in controller file `/src/api/controllers/auth.js` and authorization is required in every route that not contains the `/public/` keyword at `/src/api/routes/router.js`. Postman auth requests automatically stores authorization tokens for future private requests;
     - ***Cookie integration***: package [cookie-parser] that enables login/logout to generates/removes cookies with authorization token, at file `/src/helpers/parser/cookie-parser.js` used in `/src/api/controllers/auth.js` login/logout functions;
     - ***Restore user password example***: functionality that sends an email to user containing a token that can be used to restore user's missing password. The implemented approach in `forgot password` and `restore password` functions at file `/src/api/controllers/auth.js` dont use any extra field in the database, instead it generates a token with user's email in the payload with a secret that is composed by the client ip and email(could be improved through encryption and other strategies), that way the token can only be used for that specific email for the designed user(ip address) within expiration time.;
     - ***Simple user data manipulation***: simple crud functions for user data and user utilities at `/src/api/controllers/user.js`;
     - ***Picture upload example***: Simple picture upload example that validates file type and assign it to a username when uploaded which also can be downloaded, at file `/src/api/controllers/user.js`;
     
-    
-    
-    <br/><br/>
-  <img src="https://download.logo.wine/logo/MySQL/MySQL-Logo.wine.png" width="auto" height="64px">
-  
-  - **user-service-sequelize**: Example service using MySQL alongside [sequelize] for user data manipulation, authentication and authorization.
-    
-    -***~~TODO~~***
   
   
+  
+  <br/><br/>
+  - ~~***TODOS***~~:
+
+    - **product-service-mongoose**: Example service using ***MongoDB*** alongside [mongoose] for product data manipulation, illustrating more complex mongoose queries.
+    
+    - **chat-service-mongoose-socketio**: Example service using ***Redis***([redis]) and [socket.io] illustrating a realtime chat with websockets.
+    
+    - **user-service-sequelize**: Example service using ***MySQL*** alongside [sequelize] for user data manipulation, authentication and authorization.
+
   
 
 
@@ -135,7 +137,9 @@ This project try to illustrate some usual structures, features and applications 
       share host dir as readonly:	docker run… -v <absolute/path>:<container/path>:ro --name...
       get container ip:		docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container-name>
       ```
-      To use containers with nginx see below.
+      - ~~***TODO***~~: 
+        - Understand better nginx configurations for reverse proxy,load balancing and headers setup.
+        - API gateway setup with nginx.
       
 <br/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/220px-Nginx_logo.svg.png" width="auto" height="32px">      
  
@@ -200,6 +204,9 @@ This project try to illustrate some usual structures, features and applications 
 [jsonwebtoken]:<https://www.npmjs.com/package/jsonwebtoken>
 
 [sequelize]:<https://www.npmjs.com/package/sequelize>
+
+[redis]: <https://www.npmjs.com/package/redis>
+[socket.io]:<https://socket.io/>
 
 [Kubernetes]: <https://kubernetes.io/pt/>
 [Docker]: <https://www.docker.com/>
