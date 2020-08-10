@@ -98,7 +98,7 @@ This project try to illustrate some usual structures, features and applications 
     
     - **chat-service-mongoose-socketio**: Example service using ***Redis***([redis]) and [socket.io] illustrating a realtime chat with websockets.
     
-    - **user-service-sequelize**: Example service using ***MySQL*** alongside [sequelize] for user data manipulation, authentication and authorization.
+    - **user-service-sequelize**: Example service using ***MySQL*** alongside [sequelize] for user data manipulation in a simple structured database with relationships, authentication and authorization(using [passport] auth0 or Oauth2 strategy).
 
   
 
@@ -204,6 +204,7 @@ This project try to illustrate some usual structures, features and applications 
 [jsonwebtoken]:<https://www.npmjs.com/package/jsonwebtoken>
 
 [sequelize]:<https://www.npmjs.com/package/sequelize>
+[passport]:<http://www.passportjs.org/>
 
 [redis]: <https://www.npmjs.com/package/redis>
 [socket.io]:<https://socket.io/>
