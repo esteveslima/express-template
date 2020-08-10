@@ -137,9 +137,7 @@ This project try to illustrate some usual structures, features and applications 
       share host dir as readonly:	docker run… -v <absolute/path>:<container/path>:ro --name...
       get container ip:		docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container-name>
       ```
-      - ~~***TODO***~~: 
-        - Understand better nginx configurations for reverse proxy,load balancing and headers setup.
-        - API gateway setup with nginx.
+
       
 <br/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/220px-Nginx_logo.svg.png" width="auto" height="32px">      
  
@@ -149,7 +147,9 @@ This project try to illustrate some usual structures, features and applications 
       
       For load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `nginx/nginx.conf` file.
 
-
+      - ~~***TODO***~~: 
+        - Understand better nginx configurations for reverse proxy,load balancing and headers setup.
+        - API gateway setup with nginx.
 
 
 
