@@ -41,7 +41,7 @@ This project try to illustrate some usual structures, features and applications 
   - Environment setup with common variables(like hosts/token).
   - Authorization setup in headers configuration and automatically saved in the environment with the use of scripts in stratetic requests(like login/logout).
 
-
+    - ~~***TODO***~~: Find a way to do load/stress testing on server using postman or any other tool.
 
 
 
@@ -94,7 +94,7 @@ This project try to illustrate some usual structures, features and applications 
   <br/><br/>
   - ~~***TODOS***~~:
 
-    - **product-service-mongoose**: Example service using ***MongoDB*** alongside [mongoose] for product data manipulation, illustrating more complex mongoose queries.
+    - **product-service-mongoose**: Example service using ***MongoDB*** alongside [mongoose] for product data manipulation, illustrating more complex mongoose queries and schemas relationships, using configuration for a ***Typescript*** project.
     
     - **chat-service-mongoose-socketio**: Example service using ***Redis***([redis]) and [socket.io] illustrating a realtime chat with websockets.
     
@@ -176,7 +176,19 @@ This project try to illustrate some usual structures, features and applications 
   sudo netstat -apn|grep -w PORT
   ```
   
+- Self-signed ssl certification(~~not valid yet: search for letsencrypt~~):
   
+  ```bash
+    openssl req -newkey rsa:4096 \
+            -x509 \
+            -sha256 \
+            -days 3650 \
+            -nodes \
+            -out certificate.crt \
+            -keyout certificate.key \
+            -subj "/C=BR/ST=STATE/L=LOCALITY/O=ORG_NAME/OU=ORG_UNITY/CN=DOMAIN"
+  ```
+ *subj is optional and its used to create directly without typing every field*
  
 
   
