@@ -49,6 +49,7 @@ This project try to illustrate some usual structures, features and applications 
 ## Template services
 
   <br/>
+  
   - ~~***TODO***~~: Provide examples of unit testing with [mocha], [chai] and [sinon] as dev dependencies packages
 
   <br/><br/>
