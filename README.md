@@ -48,6 +48,10 @@ This project try to illustrate some usual structures, features and applications 
 <br/><br/>
 ## Template services
 
+  <br/>
+  - ~~***TODO***~~: Provide examples of unit testing with [mocha], [chai] and [sinon] as dev dependencies packages
+
+  <br/><br/>
   - **base-service**: This service contains only basic functionalities and another projects/examples should extend it's structure.
   
     - ***Contain simple examples***: simple examples covering routing and controllers(upload and email examples, in addition to errors demonstration);    
@@ -98,7 +102,7 @@ This project try to illustrate some usual structures, features and applications 
     
     - **chat-service-mongoose-socketio**: Example service using ***Redis***([redis]) and [socket.io] illustrating a realtime chat with websockets.
     
-    - **user-service-sequelize**: Example service using ***MySQL*** alongside [sequelize] for user data manipulation in a simple structured database with relationships, authentication and authorization(using [passport] auth0 or Oauth2 strategy).
+    - **user-service-sequelize**: Example service using ***MySQL*** alongside [sequelize] for user data manipulation in a simple structured database with relationships, in a multi level authentication and authorization(using [passport] auth0 or Oauth2 strategy) level.
 
   
 
@@ -196,6 +200,9 @@ This project try to illustrate some usual structures, features and applications 
 [VS Code debug]: <https://code.visualstudio.com/docs/editor/debugging>
 [Postman]: <https://www.postman.com/>
 
+[mocha]:<https://mochajs.org/>
+[chai]:<https://www.chaijs.com/>
+[sinon]:<https://sinonjs.org/>
 [dotenv]:<https://www.npmjs.com/package/dotenv>
 [morgan]:<https://www.npmjs.com/package/morgan>
 [winston]:<https://www.npmjs.com/package/winston>
