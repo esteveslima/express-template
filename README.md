@@ -126,6 +126,7 @@ This project try to illustrate some usual structures, features and applications 
       Docker common commands:
       ```bash
       build image: 			docker build --tag <image-tag-name> .
+      snapshot container img:         docker commit <containerId> <image-tag-name>
       run image container:		docker run --publish <host_port>:<container_port> --restart always --detach --name <container-name> <image-tag-name>
       
       start container:		docker start <container-name>
