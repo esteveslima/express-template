@@ -50,7 +50,9 @@ This project try to illustrate some usual structures, features and applications 
 
   <br/>
   
-  - ~~***TODO***~~: Provide examples of unit testing with [mocha], [chai] and [sinon] as dev dependencies packages
+  - ~~***TODO***~~: 
+    - Provide examples of unit testing with [mocha], [chai] and [sinon] as dev dependencies packages
+    - Define a helper file inside config(maybe .env?) to map external urls to variables, making things easy in multiple containers and future configurations 
 
   <br/><br/>
   - **base-service**: This service contains only basic functionalities and another projects/examples should extend it's structure.
@@ -111,15 +113,11 @@ This project try to illustrate some usual structures, features and applications 
 <br/><br/>
 ## Deployment features
 
-<br/><img src="https://kubernetes.io/images/favicon.png" width="auto" height="64px">
-
- - [Kubernetes] - ~~***TODO***~~
-
 <br/><img src="https://media-exp1.licdn.com/dms/image/C560BAQEyEAwtp40d0A/company-logo_200_200/0?e=2159024400&v=beta&t=EPJvNJlim1cjQJvPU9LF62pYVDT9k9sWml6OrrYPrhA" width="auto" height="64px">
 
  - [Docker] - Services containerization (vscode extension should also be installed)
  
-      Each service has a `Dockerfile` and `.dockerignore` with a few configurations to create a node js container image and deploy the server inside of it.
+      Each service has a `Dockerfile` and `.dockerignore` with a few configurations to create a node js container image and copy the server inside of it. The file is configuring to build a standalone server.
 
       To speed up the build process, each service also has a bash script that stop/remove any existing image/container and build/run it with a few configurations like forward publishing port to host, autorestarting and running in background.
 
@@ -127,7 +125,11 @@ This project try to illustrate some usual structures, features and applications 
       ```bash
       build image: 			docker build --tag <image-tag-name> .
       snapshot container img:         docker commit <containerId> <image-tag-name>
-      run image container:		docker run --publish <host_port>:<container_port> --restart always --detach --name <container-name> <image-tag-name>
+      run img container:		docker run [options] --name <container-name> <image-tag-name> [OPTIONAL override default CMD]
+        options:  --publish <host_port>:<container_port>                  ->  forward host port to container port
+                  --restart <always/unless-stopped/on-failure>            ->  restart policy
+                  --detach                                                ->  run container in background
+                  -v <host/absolute/path>:<container/absolute/path>:ro    ->  share host dir as readonly in the container      
       
       start container:		docker start <container-name>
       stop container:		        docker stop <container-name>
@@ -136,14 +138,25 @@ This project try to illustrate some usual structures, features and applications 
       list containers:	        docker ps -a
       
       remove image:		        docker rmi <imageId>
-      remove container:		docker rm <container-name>
+      remove all images:		docker rmi -f $(docker images -a - q)
+      remove container:		docker rm <container-name>      
+      remove all containers:		docker rm -vf $(docker ps -a -q)
+      remove stopped containers:      docker system prune
 
-      explore running container:	docker exec -t -i <container-name> /bin/bash
-      copy container file:		docker cp <containerId>:/from/root/file/path /host/path/target
-      share host dir as readonly:	docker run… -v <absolute/path>:<container/path>:ro --name...
+      container's logs:               docker logs <container-name>
+      execute command in container:	docker exec -it <container-name> <command>
+      explore running container:	docker exec -it <container-name> /bin/bash
+      copy container file:		docker cp <containerId>:/from/root/file/path /host/path/target      
       get container ip:		docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container-name>
       ```
 
+
+
+<br/><img src="https://kubernetes.io/images/favicon.png" width="auto" height="64px">
+
+ - [Kubernetes] - ~~***TODO***~~
+
+      
       
 <br/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/220px-Nginx_logo.svg.png" width="auto" height="32px">      
  
