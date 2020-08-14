@@ -123,13 +123,14 @@ This project try to illustrate some usual structures, features and applications 
 
       Docker common commands:
       ```bash
-      build image: 			docker build --tag <image-tag-name> .
+      build image: 	docker build --tag <image-tag-name> -f <dockerfilePath/Dockerfile> <projectRootPath>      //.dockerignore must be at context root
       snapshot container img:         docker commit <containerId> <image-tag-name>
-      run img container:		docker run [options] --name <container-name> <image-tag-name> [OPTIONAL override default CMD]
-        options:  --publish <host_port>:<container_port>                  ->  forward host port to container port
-                  --restart <always/unless-stopped/on-failure>            ->  restart policy
-                  --detach                                                ->  run container in background
-                  -v <host/absolute/path>:<container/absolute/path>:ro    ->  share host dir as readonly in the container      
+      run img container:		docker run [options] --name <container-name> <image-tag-name> [optional cmd override]
+        options:  --publish <host_port>:<container_port>                    ->  forward host port to container port
+                  --restart <always/unless-stopped/on-failure>              ->  restart policy
+                  --detach                                                  ->  run container in background
+                  -v <absolute/$(pwd) hostPath>:<container absolutePath>:ro ->  use volumes to share host dir as readonly in the container      
+                  -v <container absolutePath>                               ->  blacklists container folder, preventing volume changes from above option
       
       start container:		docker start <container-name>
       stop container:		        docker stop <container-name>
