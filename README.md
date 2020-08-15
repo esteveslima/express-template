@@ -118,8 +118,10 @@ This project try to illustrate some usual structures, features and applications 
  - [Docker] - Services containerization (vscode extension should also be installed)
  
   Each service has a `Dockerfile` and `Dockerfile.dev` with a few configurations to create a node js container image and copy the server inside of it,for production and development consecutivelly(`.dev` is useful for automatic changes and testing).
+  
   A `.dockerignore` is also set to filter files copied to the container.
-  The file s are configured to build a standalone server.
+  
+  The files are configured to build a standalone server.
 
   To speed up the build process and illustrate, each service also has a bash script that stop/remove any existing image/container and build/run it with a few configurations like forward publishing port to host, autorestarting and running in background.
 
@@ -155,8 +157,11 @@ This project try to illustrate some usual structures, features and applications 
   <br/>
   
   Building multiple containers may be hard, so a docker-compose is required to handle this kind of situation.
+  
   Inside `services` folder there is a `docker-compose.yml` file describing the construction of each service within this project for production. 
+  
   Also has a `docker-compose.dev.yml` describing the same construction but for development(the difference is that `.dev` file configures a volume to share host source folder to the container and make automatic changes when update files and restart server with nodemon)
+  
   Containers built with this file share the same network, but in this example the services doesn't have any connection.
   
   docker-compose common CLI:
@@ -195,7 +200,9 @@ This project try to illustrate some usual structures, features and applications 
   docker reference: https://docs.docker.com/reference/
 
 - ~~***TODO***~~:
+
   - find a way to handle sensitive data and configure containers in configuration files more easily
+  
   - find a way to configure ssh into containers
 
 
