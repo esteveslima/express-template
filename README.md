@@ -41,13 +41,20 @@ This project try to illustrate some usual structures, features and applications 
   - Environment setup with common variables(like hosts/token).
   - Authorization setup in headers configuration and automatically saved in the environment with the use of scripts in stratetic requests(like login/logout).
 
-
+    - ~~***TODO***~~: Find a way to do load/stress testing on server using postman or any other tool.
 
 
 
 <br/><br/>
 ## Template services
 
+  <br/>
+  
+  - ~~***TODO***~~: 
+    - Provide examples of unit testing with [mocha], [chai] and [sinon] as dev dependencies packages
+    - Define a helper file inside config(maybe .env?) to map external urls to variables, making things easy in multiple containers and future configurations 
+
+  <br/><br/>
   - **base-service**: This service contains only basic functionalities and another projects/examples should extend it's structure.
   
     - ***Contain simple examples***: simple examples covering routing and controllers(upload and email examples, in addition to errors demonstration);    
@@ -94,11 +101,11 @@ This project try to illustrate some usual structures, features and applications 
   <br/><br/>
   - ~~***TODOS***~~:
 
-    - **product-service-mongoose**: Example service using ***MongoDB*** alongside [mongoose] for product data manipulation, illustrating more complex mongoose queries.
+    - **product-service-mongoose**: Example service using ***MongoDB*** alongside [mongoose] for product data manipulation, illustrating more complex mongoose queries and schemas relationships, using configuration for a ***Typescript*** project.
     
     - **chat-service-mongoose-socketio**: Example service using ***Redis***([redis]) and [socket.io] illustrating a realtime chat with websockets.
     
-    - **user-service-sequelize**: Example service using ***MySQL*** alongside [sequelize] for user data manipulation in a simple structured database with relationships, authentication and authorization(using [passport] auth0 or Oauth2 strategy).
+    - **user-service-sequelize**: Example service using ***MySQL*** alongside [sequelize] for user data manipulation in a simple structured database with relationships, in a multi level authentication and authorization(using [passport] auth0 or Oauth2 strategy) level.
 
   
 
@@ -106,38 +113,104 @@ This project try to illustrate some usual structures, features and applications 
 <br/><br/>
 ## Deployment features
 
-<br/><img src="https://kubernetes.io/images/favicon.png" width="auto" height="64px">
-
- - [Kubernetes] - ~~***TODO***~~
-
 <br/><img src="https://media-exp1.licdn.com/dms/image/C560BAQEyEAwtp40d0A/company-logo_200_200/0?e=2159024400&v=beta&t=EPJvNJlim1cjQJvPU9LF62pYVDT9k9sWml6OrrYPrhA" width="auto" height="64px">
 
  - [Docker] - Services containerization (vscode extension should also be installed)
  
-      Each service has a `Dockerfile` and `.dockerignore` with a few configurations to create a node js container image and deploy the server inside of it.
+  Each service has a `Dockerfile` and `Dockerfile.dev` with a few configurations to create a node js container image and copy the server inside of it,for production and development consecutivelly(`.dev` is useful for automatic changes and testing).
+  
+  A `.dockerignore` is also set to filter files copied to the container.
+  
+  The files are configured to build a standalone server.
 
-      To speed up the build process, each service also has a bash script that stop/remove any existing image/container and build/run it with a few configurations like forward publishing port to host, autorestarting and running in background.
+  To speed up the build process and illustrate, each service also has a bash script that stop/remove any existing image/container and build/run it with a few configurations like forward publishing port to host, autorestarting and running in background.
 
-      Docker common commands:
-      ```bash
-      build image: 			docker build --tag <image-tag-name> .
-      run image container:		docker run --publish <host_port>:<container_port> --restart always --detach --name <container-name> <image-tag-name>
+  docker common CLI:
+  ```bash
+  build image: 	                docker build --tag <image-tag-name> --file <dockerfilePath/Dockerfile> <projectRootPath>      //.dockerignore must be at context root
+  snapshot container img:         docker commit <containerId> <image-tag-name>
+  run img container:		docker run [options] --name <container-name> <image-tag-name> [optional cmd override]
+    options:  --publish <host_port>:<container_port>                          ->  forward host port to container port
+              --restart <always/unless-stopped/on-failure>                    ->  restart policy
+              --detach                                                        ->  run container in background
+              --volume <absolute/$(pwd) hostPath>:<container absolutePath>:ro ->  use volumes to share host dir as readonly in the container      
+              --volume <container absolutePath>                               ->  blacklists container folder, preventing volume changes from above option
+  
+  start/stop container:		docker <start/stop> <container-name>
+  
+  list images:			docker images
+  list containers:	        docker ps --all
+  
+  remove image:		        docker rmi <imageId>
+  remove all images:		docker rmi -f $(docker images -a - q)
+  remove container:		docker rm <container-name>      
+  remove all containers:		docker rm -vf $(docker ps -a -q)
+  remove stopped containers:      docker system prune
+
+  container logs:                 docker logs <container-name>
+  execute command in container:	docker exec --privileged -it <container-name> <command>
+  explore running container:	docker exec -it <container-name> /bin/bash
+  copy container file:		docker cp <containerId>:/from/root/file/path /host/path/target      
+  get container ip:		docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container-name>
+  ```
       
-      start container:		docker start <container-name>
-      stop container:		        docker stop <container-name>
-      
-      list images:			docker images
-      list containers:	        docker ps -a
-      
-      remove image:		        docker rmi <imageId>
-      remove container:		docker rm <container-name>
+  <br/>
+  
+  Building multiple containers may be hard, so a docker-compose is required to handle this kind of situation.
+  
+  Inside `services` folder there is a `docker-compose.yml` file describing the construction of each service within this project for production. 
+  
+  Also has a `docker-compose.dev.yml` describing the same construction but for development(the difference is that `.dev` file configures a volume to share host source folder to the container and make automatic changes when update files and restart server with nodemon)
+  
+  Containers built with this file share the same network, but in this example the services doesn't have any connection.
+  
+  docker-compose common CLI:
+  ```bash
+  *if [<services>] not provided, all services declared in docker-compose file will be affected by the following commands
+  **if out of docker-compose file context or with multiple files, it should specify including --file before docker-compose command.
+  compose commands general options(before commands):   
+    --file <dockerComposefilePath/docker-compose.yml>   ->  specify docker-compose file
+    --project-name <name>                               ->  
+    --log-level <level>                                 ->  
+    
+  
+  
+  commands:
+  
+  parallel build:                     docker-compose build --parallel
+  build and run compose containers:   docker-compose up [options] [<services>]
+    options:  --build       ->  build images
+              --detach      ->  run on background
 
-      explore running container:	docker exec -t -i <container-name> /bin/bash
-      copy container file:		docker cp <containerId>:/from/root/file/path /host/path/target
-      share host dir as readonly:	docker run… -v <absolute/path>:<container/path>:ro --name...
-      get container ip:		docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container-name>
-      ```
+  start/stop compose containers:      docker-compose <start/stop> [<services>]
+  pause/unpause compose containers:   docker-compose <pause/unpause> [<services>]
+  restart compose containers:         docker-compose restart [<services>]
+  
+  list all compose containers:        docker-compose ps --all
+  stop and remove everything:         docker-compose down --rmi all --volumes --remove-orphans && docker volume prune
 
+  execute command in container:       docker-compose exec --privileged <service> <command>
+  containers logs:                    docker-compose logs --tail="10" [<services>]            // last 10 lines of each service
+  display running processes           docker-compose top
+  ```
+  
+  Due to the current lack of support for automatic restarting on container's unhealthy status, to perform this feature it's being used an extra container https://hub.docker.com/r/willfarrell/autoheal/
+  
+  
+  docker reference: https://docs.docker.com/reference/
+
+- ~~***TODO***~~:
+
+  - find a way to handle sensitive data and configure containers in configuration files more easily
+  
+  - find a way to configure ssh into containers
+
+
+<br/><img src="https://kubernetes.io/images/favicon.png" width="auto" height="64px">
+
+ - [Kubernetes] - ~~***TODO***~~
+
+      
       
 <br/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/220px-Nginx_logo.svg.png" width="auto" height="32px">      
  
@@ -176,7 +249,19 @@ This project try to illustrate some usual structures, features and applications 
   sudo netstat -apn|grep -w PORT
   ```
   
+- Self-signed ssl certification(~~not valid yet: search for letsencrypt~~):
   
+  ```bash
+    openssl req -newkey rsa:4096 \
+            -x509 \
+            -sha256 \
+            -days 3650 \
+            -nodes \
+            -out certificate.crt \
+            -keyout certificate.key \
+            -subj "/C=BR/ST=STATE/L=LOCALITY/O=ORG_NAME/OU=ORG_UNITY/CN=DOMAIN"
+  ```
+ *subj is optional and its used to create directly without typing every field*
  
 
   
@@ -184,6 +269,9 @@ This project try to illustrate some usual structures, features and applications 
 [VS Code debug]: <https://code.visualstudio.com/docs/editor/debugging>
 [Postman]: <https://www.postman.com/>
 
+[mocha]:<https://mochajs.org/>
+[chai]:<https://www.chaijs.com/>
+[sinon]:<https://sinonjs.org/>
 [dotenv]:<https://www.npmjs.com/package/dotenv>
 [morgan]:<https://www.npmjs.com/package/morgan>
 [winston]:<https://www.npmjs.com/package/winston>
