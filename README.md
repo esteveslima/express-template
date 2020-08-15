@@ -117,40 +117,86 @@ This project try to illustrate some usual structures, features and applications 
 
  - [Docker] - Services containerization (vscode extension should also be installed)
  
-      Each service has a `Dockerfile` and `.dockerignore` with a few configurations to create a node js container image and copy the server inside of it. The file is configuring to build a standalone server.
+  Each service has a `Dockerfile` and `Dockerfile.dev` with a few configurations to create a node js container image and copy the server inside of it,for production and development consecutivelly(`.dev` is useful for automatic changes and testing).
+  A `.dockerignore` is also set to filter files copied to the container.
+  The file s are configured to build a standalone server.
 
-      To speed up the build process, each service also has a bash script that stop/remove any existing image/container and build/run it with a few configurations like forward publishing port to host, autorestarting and running in background.
+  To speed up the build process and illustrate, each service also has a bash script that stop/remove any existing image/container and build/run it with a few configurations like forward publishing port to host, autorestarting and running in background.
 
-      Docker common commands:
-      ```bash
-      build image: 	docker build --tag <image-tag-name> -f <dockerfilePath/Dockerfile> <projectRootPath>      //.dockerignore must be at context root
-      snapshot container img:         docker commit <containerId> <image-tag-name>
-      run img container:		docker run [options] --name <container-name> <image-tag-name> [optional cmd override]
-        options:  --publish <host_port>:<container_port>                    ->  forward host port to container port
-                  --restart <always/unless-stopped/on-failure>              ->  restart policy
-                  --detach                                                  ->  run container in background
-                  -v <absolute/$(pwd) hostPath>:<container absolutePath>:ro ->  use volumes to share host dir as readonly in the container      
-                  -v <container absolutePath>                               ->  blacklists container folder, preventing volume changes from above option
+  docker common CLI:
+  ```bash
+  build image: 	                docker build --tag <image-tag-name> --file <dockerfilePath/Dockerfile> <projectRootPath>      //.dockerignore must be at context root
+  snapshot container img:         docker commit <containerId> <image-tag-name>
+  run img container:		docker run [options] --name <container-name> <image-tag-name> [optional cmd override]
+    options:  --publish <host_port>:<container_port>                          ->  forward host port to container port
+              --restart <always/unless-stopped/on-failure>                    ->  restart policy
+              --detach                                                        ->  run container in background
+              --volume <absolute/$(pwd) hostPath>:<container absolutePath>:ro ->  use volumes to share host dir as readonly in the container      
+              --volume <container absolutePath>                               ->  blacklists container folder, preventing volume changes from above option
+  
+  start/stop container:		docker <start/stop> <container-name>
+  
+  list images:			docker images
+  list containers:	        docker ps --all
+  
+  remove image:		        docker rmi <imageId>
+  remove all images:		docker rmi -f $(docker images -a - q)
+  remove container:		docker rm <container-name>      
+  remove all containers:		docker rm -vf $(docker ps -a -q)
+  remove stopped containers:      docker system prune
+
+  container logs:                 docker logs <container-name>
+  execute command in container:	docker exec --privileged -it <container-name> <command>
+  explore running container:	docker exec -it <container-name> /bin/bash
+  copy container file:		docker cp <containerId>:/from/root/file/path /host/path/target      
+  get container ip:		docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container-name>
+  ```
       
-      start container:		docker start <container-name>
-      stop container:		        docker stop <container-name>
-      
-      list images:			docker images
-      list containers:	        docker ps -a
-      
-      remove image:		        docker rmi <imageId>
-      remove all images:		docker rmi -f $(docker images -a - q)
-      remove container:		docker rm <container-name>      
-      remove all containers:		docker rm -vf $(docker ps -a -q)
-      remove stopped containers:      docker system prune
+  <br/>
+  
+  Building multiple containers may be hard, so a docker-compose is required to handle this kind of situation.
+  Inside `services` folder there is a `docker-compose.yml` file describing the construction of each service within this project for production. 
+  Also has a `docker-compose.dev.yml` describing the same construction but for development(the difference is that `.dev` file configures a volume to share host source folder to the container and make automatic changes when update files and restart server with nodemon)
+  Containers built with this file share the same network, but in this example the services doesn't have any connection.
+  
+  docker-compose common CLI:
+  ```bash
+  *if [<services>] not provided, all services declared in docker-compose file will be affected by the following commands
+  **if out of docker-compose file context or with multiple files, it should specify including --file before docker-compose command.
+  compose commands general options(before commands):   
+    --file <dockerComposefilePath/docker-compose.yml>   ->  specify docker-compose file
+    --project-name <name>                               ->  
+    --log-level <level>                                 ->  
+    
+  
+  
+  commands:
+  
+  parallel build:                     docker-compose build --parallel
+  build and run compose containers:   docker-compose up [options] [<services>]
+    options:  --build       ->  build images
+              --detach      ->  run on background
 
-      container's logs:               docker logs <container-name>
-      execute command in container:	docker exec -it <container-name> <command>
-      explore running container:	docker exec -it <container-name> /bin/bash
-      copy container file:		docker cp <containerId>:/from/root/file/path /host/path/target      
-      get container ip:		docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container-name>
-      ```
+  start/stop compose containers:      docker-compose <start/stop> [<services>]
+  pause/unpause compose containers:   docker-compose <pause/unpause> [<services>]
+  restart compose containers:         docker-compose restart [<services>]
+  
+  list all compose containers:        docker-compose ps --all
+  stop and remove everything:         docker-compose down --rmi all --volumes --remove-orphans && docker volume prune
 
+  execute command in container:       docker-compose exec --privileged <service> <command>
+  containers logs:                    docker-compose logs --tail="10" [<services>]            // last 10 lines of each service
+  display running processes           docker-compose top
+  ```
+  
+  Due to the current lack of support for automatic restarting on container's unhealthy status, to perform this feature it's being used an extra container https://hub.docker.com/r/willfarrell/autoheal/
+  
+  
+  docker reference: https://docs.docker.com/reference/
+
+- ~~***TODO***~~:
+  - find a way to handle sensitive data and configure containers in configuration files more easily
+  - find a way to configure ssh into containers
 
 
 <br/><img src="https://kubernetes.io/images/favicon.png" width="auto" height="64px">
