@@ -7,7 +7,7 @@ WORKDIR /service
 # Copy from your host to your current container location
 COPY package.json .
 # Run install command inside image filesystem.
-RUN npm install --only=production
+RUN npm install
 
 # Copy the rest of project files from your host to your current location.
 COPY . .
@@ -19,7 +19,7 @@ HEALTHCHECK --interval=5m --timeout=10s --start-period=10s --retries=5 CMD curl 
 EXPOSE 8080
 
 # Run the specified command within the container.
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "dev" ]
 
 
 

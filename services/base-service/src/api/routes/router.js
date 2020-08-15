@@ -5,14 +5,14 @@ const bbbRouter = require('./bbb');
 module.exports = () => {
   const router = express.Router();
 
-  // Assigning routes
-  aaaRouter.joinToRouter(router);
-  bbbRouter.joinToRouter(router);
-
   // Server status response
   router.get('/status', (req, res/* , next */) => {
     res.status(200).json({ Status: true });
   });
+
+  // Assigning routes
+  aaaRouter.joinToRouter(router);
+  bbbRouter.joinToRouter(router);
 
   // Not found(404) response
   router.all('*', (req, res/* , next */) => {

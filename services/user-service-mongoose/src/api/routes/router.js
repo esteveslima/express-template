@@ -8,17 +8,19 @@ const adjustMiddleware = require('../middlewares/adjust-request');
 module.exports = () => {
   const router = express.Router();
 
+  // Server status response
+  router.get('/status', (req, res/* , next */) => {
+    res.status(200).json({ Status: true });
+  });
+
   // Router authorization middleware, for routes not marked as public
   router.all(/^((?!\/public\/).)*$/i, jwtAuth.authorization, adjustMiddleware.appendUser);
+  // Could revert logic and apply to all routes marked as private
+  // router.all(/(\/private\/)/i, jwtAuth.authorization, adjustMiddleware.appendUser);
 
   // Assigning routes
   userRouter.joinToRouter(router);
   authRouter.joinToRouter(router);
-
-  // Server status response
-  router.get('/public/status', (req, res/* , next */) => {
-    res.status(200).json({ Status: true });
-  });
 
   // Not found(404) response
   router.all('*', (req, res/* , next */) => {

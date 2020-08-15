@@ -1,5 +1,4 @@
 **/Dockerfile
-**/Dockerfile.dev
 **/.dockerignore
 **/.git
 **/.gitignore
