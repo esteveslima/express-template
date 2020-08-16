@@ -145,7 +145,7 @@ This project try to illustrate some usual structures, features and applications 
   remove all images:		docker rmi -f $(docker images -a - q)
   remove container:		docker rm <container-name>      
   remove all containers:		docker rm -vf $(docker ps -a -q)
-  remove stopped containers:      docker system prune
+  remove stopped containers:      docker system prune -a
 
   container logs:                 docker logs <container-name>
   execute command in container:	docker exec --privileged -it <container-name> <command>
@@ -162,7 +162,7 @@ This project try to illustrate some usual structures, features and applications 
   
   Also has a `docker-compose.dev.yml` describing the same construction but for development(the difference is that `.dev` file configures a volume to share host source folder to the container and make automatic changes when update files and restart server with nodemon)
   
-  Containers built with this file share the same network, but in this example the services doesn't have any connection.
+  In this example the services doesn't have any connection, but containers built with this file **share the same network**, hence this solution is **only viable for not-distributed** containers/network. For distributed containers/network see Kubernetes below.
   
   docker-compose common CLI:
   ```bash
@@ -208,8 +208,45 @@ This project try to illustrate some usual structures, features and applications 
 
 <br/><img src="https://kubernetes.io/images/favicon.png" width="auto" height="64px">
 
- - [Kubernetes] - ~~***TODO***~~
+ - [Kubernetes] - Containers Orchestration (vscode extension should also be installed)
+ 
+ 
+  Testing is made using minikube and a VM, hence localhost it's not accessible and the application should be accessed through `minikube ip`.   
+ 
+  pods        -> conjunto de containers fortemente conectados(parametros imutaveis portanto inviaveis em prod) => constantemente sendo atualizadas/substituidas
+  deployment  -> capaz de criar pods, especificar replicas, template e outras especicações possibilitando alteração dos parametros dos pods(deletando/atualizando)
 
+  service     -> capaz de fazer a ligação automatica do exterior aos pods criados(que estão sendo sempre recriados e tem ips modificados constantemente)
+
+
+
+  Fazendo uma abordagem descritiva, os objetos são criados/modificados através de um arquivo de configuração `.yml` pelo comando `kubectl apply -f <file>`
+  
+  kubectl apply -f <pathToConfigFile.yml>
+
+  kubectl describe pods [<pods>]
+  kubectl get pods [<pods>]
+  kubectl get pods -o wide
+  
+  kubectl get deployments [<deployments>]
+  
+  kubectl logs <pod-name>
+  kubectl exec -it <pod-name> /bin/bash
+  .
+  .
+  .
+  Varios comandos/ferramentas de containeres também funcionam pelo kubectl
+  
+  Ferramenta util para exploração e teste:
+  redireciona o docker local para o docker da VM no terminal fazendo os comandos docker serem referentes aos containeres da VM :   eval $(minikube docker-env)
+  
+  Gambiarra para atualizar a imagem do deployment utilizando uma abordagem imperativa com o comando abaixo(pode ser necessario deletar o cache de images usando o eval acima).
+  Os containeres quando criados devem fornecer um versionamento unico na tag(--tag tag:123version123...)
+  kubectl set image deployment/<object-name> <container-name> = <fullImageNameTagWithVersion>
+  
+  
+  
+  
       
       
 <br/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/220px-Nginx_logo.svg.png" width="auto" height="32px">      
