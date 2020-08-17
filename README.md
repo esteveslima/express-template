@@ -127,9 +127,9 @@ This project try to illustrate some usual structures, features and applications 
 
   docker common CLI:
   ```bash
-  build image: 	                docker build --tag <image-tag-name> --file <dockerfilePath/Dockerfile> <projectRootPath>      //.dockerignore must be at context root
-  snapshot container img:         docker commit <containerId> <image-tag-name>
-  run img container:		docker run [options] --name <container-name> <image-tag-name> [optional cmd override]
+  build image: 	                docker build --tag <image-name:tag> --file <dockerfilePath/Dockerfile> <projectRootPath>      //.dockerignore must be at context root
+  snapshot container img:         docker commit <containerId> <image-name:tag>
+  run img container:		docker run [options] --name <container-name> <image-name:tag> [optional cmd override]
     options:  --publish <host_port>:<container_port>                          ->  forward host port to container port
               --restart <always/unless-stopped/on-failure>                    ->  restart policy
               --detach                                                        ->  run container in background
@@ -141,7 +141,7 @@ This project try to illustrate some usual structures, features and applications 
   list images:			docker images
   list containers:	        docker ps --all
   
-  remove image:		        docker rmi <imageId>
+  remove image:		        docker rmi <image-name:tag>
   remove all images:		docker rmi -f $(docker images -a - q)
   remove container:		docker rm <container-name>      
   remove all containers:		docker rm -vf $(docker ps -a -q)
@@ -152,13 +152,17 @@ This project try to illustrate some usual structures, features and applications 
   explore running container:	docker exec -it <container-name> /bin/bash
   copy container file:		docker cp <containerId>:/from/root/file/path /host/path/target      
   get container ip:		docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container-name>
+  
+  login/logout hub/server:     docker login/logout
+  tag img before push:        docker tag <image-name:tag> <username/image-name:tag>
+  push image do hub/server:     docker push <username/image-name:tag>
   ```
       
   <br/>
   
-  Building multiple containers may be hard, so a docker-compose is required to handle this kind of situation.
+  Building multiple containers may be hard, so a [docker-compose] is required to handle this kind of situation.
   
-  Inside `services` folder there is a `docker-compose.yml` file describing the construction of each service within this project for production. 
+  Inside `services/_deployments` folder there is a `docker-compose.yml` file describing the construction of each service within this project for production. 
   
   Also has a `docker-compose.dev.yml` describing the same construction but for development(the difference is that `.dev` file configures a volume to share host source folder to the container and make automatic changes when update files and restart server with nodemon)
   
@@ -192,6 +196,9 @@ This project try to illustrate some usual structures, features and applications 
   execute command in container:       docker-compose exec --privileged <service> <command>
   containers logs:                    docker-compose logs --tail="10" [<services>]            // last 10 lines of each service
   display running processes           docker-compose top
+  
+  login/logout hub/server:            docker login/logout
+  push compose images:                docker-compose push [<services>]              //services within compose file must have username tagged
   ```
   
   Due to the current lack of support for automatic restarting on container's unhealthy status, to perform this feature it's being used an extra container https://hub.docker.com/r/willfarrell/autoheal/
@@ -211,38 +218,46 @@ This project try to illustrate some usual structures, features and applications 
  - [Kubernetes] - Containers Orchestration (vscode extension should also be installed)
  
  
-  Testing is made using minikube and a VM, hence localhost it's not accessible and the application should be accessed through `minikube ip`.   
+  Testing is made using [minikube] and a [Virtual Machine], hence localhost it's not accessible and the application should be accessed through `minikube ip`.   
  
   pods        -> conjunto de containers fortemente conectados(parametros imutaveis portanto inviaveis em prod) => constantemente sendo atualizadas/substituidas
   deployment  -> capaz de criar pods, especificar replicas, template e outras especicações possibilitando alteração dos parametros dos pods(deletando/atualizando)
 
   service     -> capaz de fazer a ligação automatica do exterior aos pods criados(que estão sendo sempre recriados e tem ips modificados constantemente)
 
-
+  [kubectl]
 
   Fazendo uma abordagem descritiva, os objetos são criados/modificados através de um arquivo de configuração `.yml` pelo comando `kubectl apply -f <file>`
   
-  kubectl apply -f <pathToConfigFile.yml>
+  kubectl apply -f <pathTo Folder/ConfigFile.yml>
 
-  kubectl describe pods [<pods>]
-  kubectl get pods [<pods>]
-  kubectl get pods -o wide
+  kubectl [command] [object-type] [<object-names>]
+    - commands:   get ... -o wide
+                  describe
+                  logs
+                  delete
+    - types:      pods
+                  services
   
-  kubectl get deployments [<deployments>]
-  
-  kubectl logs <pod-name>
+  kubectl logs
   kubectl exec -it <pod-name> /bin/bash
-  .
-  .
-  .
-  Varios comandos/ferramentas de containeres também funcionam pelo kubectl
+  
+  imperative cleanup:
+  kubectl delete deployments --all
+  kubectl delete services --all
+  kubectl delete pods --all
+  kubectl delete daemonset --all
+  
+  referências:  https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get
+                https://kubernetes.io/docs/reference/kubectl/overview/
+
   
   Ferramenta util para exploração e teste:
-  redireciona o docker local para o docker da VM no terminal fazendo os comandos docker serem referentes aos containeres da VM :   eval $(minikube docker-env)
+  redireciona o docker local para o docker da VM no terminal fazendo os comandos docker serem referentes aos containeres da VM : eval $(minikube docker-env)
   
   Gambiarra para atualizar a imagem do deployment utilizando uma abordagem imperativa com o comando abaixo(pode ser necessario deletar o cache de images usando o eval acima).
   Os containeres quando criados devem fornecer um versionamento unico na tag(--tag tag:123version123...)
-  kubectl set image deployment/<object-name> <container-name> = <fullImageNameTagWithVersion>
+  kubectl set image deployment/<object-type> <container-name> = <fullImageNameTagWithVersion>
   
   
   
@@ -335,5 +350,9 @@ This project try to illustrate some usual structures, features and applications 
 [socket.io]:<https://socket.io/>
 
 [Kubernetes]: <https://kubernetes.io/pt/>
+[kubectl]: <https://kubernetes.io/docs/reference/kubectl/overview/>
+[minikube]: <https://kubernetes.io/docs/setup/learning-environment/minikube/>
+[Virtual Machine]: <https://www.virtualbox.org/wiki/Linux_Downloads>
 [Docker]: <https://www.docker.com/>
+[docker-compose]: <https://docs.docker.com/compose/>
 [Nginx]: <https://www.nginx.com/>
