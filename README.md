@@ -60,7 +60,7 @@ This project try to illustrate some usual structures, features and applications 
     - ***Contain simple examples***: simple examples covering routing and controllers(upload and email examples, in addition to errors demonstration);    
     - ***HTTPS Structure***: Structure provided, ~~but not in use~~, alongside http server at `index.js`;
       - ~~***TODO***~~: Understand better the generation of valid ssl certificates(self signed certificates using letsencrypt).
-    - ***Decoupled packages***: they are simply imported and used, all it's configurations are made within a proper file at `/src/helpers/`;
+    - ***Decoupled packages***: they are simply imported and used, all it's configurations are made inside a proper file at `/src/helpers/`;
     - ***Loader structure***: a more modular way to import and setup modules at `/src/loaders/`, which are imported at `index.js` before setup servers and start listening;
     - ***3 layer architecture***: clear separation of routing, business logic in controllers and data access in dao with their models. Middlewares added to provide request adjust and validation;
     - ***Router construction***: express router demonstration with subrouters at `/src/api/routes/`, with server status check and custom not found response;
@@ -69,7 +69,7 @@ This project try to illustrate some usual structures, features and applications 
     - ***Loggers***: [morgan] package at `/src/helpers/log/morgan.js` responsible for logging requests and [winston] package at `/src/helpers/log/winston.js` responsible for another kinds of logging. Logs can be enabled/disabled at .env configuration file
     - ***Centralized error handling***: file handler `/src/helpers/error/error-handler.js` put at the bottom of node call stack that handles possible errors, tracing errors for debugging using the package [stack-trace] at `/src/helpers/error/stack-trace.js` and logging with winston;
     - ***Standartized errors***: possibility to structure error responses at file `/src/helpers/error/structure/error-codes.js` and call them manually. Also possible to test unexpected errors at file `/src/helpers/error/structure/error-response.js` in runtime and build a proper error response;
-    - ***Easy async handling***: drying code with async handler at file `/src/helpers/async/async-handler.js` dispensing the use of try/catch blocks in async functions at files like `/src/api/controllers/*`. Using function at `/src/helpers/async/wrap-async.js` it's possible to wrap async handler in every function within file;
+    - ***Easy async handling***: drying code with async handler at file `/src/helpers/async/async-handler.js` dispensing the use of try/catch blocks in async functions at files like `/src/api/controllers/*`. Using function at `/src/helpers/async/wrap-async.js` it's possible to wrap async handler in every function inside the file;
     - ***Security***: few packages like [cors], [helmet], [hpp], [express-rate-limit], [xss-clean] to apply some security with headers or as middleware at file `/src/helpers/security/*`;
       - ~~***TODO***~~: Understand better these security headers for proper integration with front-end applications and servers like Nginx.
     - ***Email template***: simple email example using [nodemailer] at `/src/helpers/email/nodemailer.js` which can be improved to send customized html emails with dynamic data;
@@ -81,6 +81,8 @@ This project try to illustrate some usual structures, features and applications 
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/MongoDB_Logo.svg/220px-MongoDB_Logo.svg.png" width="auto" height="32px">
 
   - **user-service-mongoose**: Example service using ***MongoDB*** alongside [mongoose] for user data manipulation, authentication and authorization.
+  
+    ~~This service requires the creation of a mongodb cluster(local or remote) before running.~~
   
     - ***Middlewares usage demonstration***: usability example of middlewares for request handling at `/src/api/middlewares/*`;
     - ***Dao usage demonstration***: usability of dao at `/src/database/dao/*`, which should only access the ODM/ORM model to manipulate/search data and leave business logic to the controllers;
@@ -149,7 +151,7 @@ This project try to illustrate some usual structures, features and applications 
 
   container logs:                 docker logs <container-name>
   execute command in container:	docker exec --privileged -it <container-name> <command>
-  explore running container:	docker exec -it <container-name> /bin/bash
+  explore running container:	docker exec -it <container-name> </bin/bash or sh>
   copy container file:		docker cp <containerId>:/from/root/file/path /host/path/target      
   get container ip:		docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container-name>
   
@@ -162,11 +164,12 @@ This project try to illustrate some usual structures, features and applications 
   
   Building multiple containers may be hard, so a [docker-compose] is required to handle this kind of situation.
   
-  Inside `services/_deployments` folder there is a `docker-compose.yml` file describing the construction of each service within this project for production. 
+  Inside `services/_deployments` folder there is a `docker-compose.yml` file describing the construction of each service inside this project for production. 
   
   Also has a `docker-compose.dev.yml` describing the same construction but for development(the difference is that `.dev` file configures a volume to share host source folder to the container and make automatic changes when update files and restart server with nodemon)
   
-  In this example the services doesn't have any connection, but containers built with this file **share the same network**, hence this solution is **only viable for not-distributed** containers/network. For distributed containers/network see Kubernetes below.
+  Containers built with this file **share the same network**, connections between containers must be made referencing by service name(usually assign to a env variable that is used inside server).
+  This solution is **only viable for non-distributed** containers/network, for distributed containers/network see Kubernetes below.
   
   docker-compose common CLI:
   ```bash
@@ -198,7 +201,7 @@ This project try to illustrate some usual structures, features and applications 
   display running processes           docker-compose top
   
   login/logout hub/server:            docker login/logout
-  push compose images:                docker-compose push [<services>]              //services within compose file must have username tagged
+  push compose images:                docker-compose push [<services>]              //services inside compose file must have username tagged
   ```
   
   Due to the current lack of support for automatic restarting on container's unhealthy status, to perform this feature it's being used an extra container https://hub.docker.com/r/willfarrell/autoheal/
@@ -217,13 +220,16 @@ This project try to illustrate some usual structures, features and applications 
 
  - [Kubernetes] - Containers Orchestration (vscode extension should also be installed)
  
+  Kubernetes requires images already built with docker or docker-compose tools.
  
   Testing is made using [minikube] and a [Virtual Machine], hence localhost it's not accessible and the application should be accessed through `minikube ip`.   
  
   pods        -> conjunto de containers fortemente conectados(parametros imutaveis portanto inviaveis em prod) => constantemente sendo atualizadas/substituidas
   deployment  -> capaz de criar pods, especificar replicas, template e outras especicações possibilitando alteração dos parametros dos pods(deletando/atualizando)
-
   service     -> capaz de fazer a ligação automatica do exterior aos pods criados(que estão sendo sempre recriados e tem ips modificados constantemente)
+    nodeport:   fornece portas de acesso para os outros objetos dentro do nó e para o exterior
+    cluster     fornece porta de acesso apenas para objetos dentro do próprio nó
+  pvc         -> 
 
   [kubectl]
 
@@ -239,7 +245,11 @@ This project try to illustrate some usual structures, features and applications 
     - types:      pods
                   services
   
-  kubectl logs
+  kubectl get storageclass        -> get options of provisioners to create persistant volumes. May be default minikube(allocates host's HD), AWS, GCP, Azure, etc
+  kubectl describe storageclass   -> describe provisioners
+  kubectl get pv                  -> get all persistant volumes created
+  kubectl get pvc                 -> get all persistant volumes claims(requirements for storage) created
+  kubectl logs <pod>
   kubectl exec -it <pod-name> /bin/bash
   
   imperative cleanup:
@@ -253,7 +263,7 @@ This project try to illustrate some usual structures, features and applications 
 
   
   Ferramenta util para exploração e teste:
-  redireciona o docker local para o docker da VM no terminal fazendo os comandos docker serem referentes aos containeres da VM : eval $(minikube docker-env)
+  carrega as variaveis de ambiente do docker da VM no terminal atual, fazendo os comandos docker se aplicarem à VM: eval $(minikube docker-env)
   
   Gambiarra para atualizar a imagem do deployment utilizando uma abordagem imperativa com o comando abaixo(pode ser necessario deletar o cache de images usando o eval acima).
   Os containeres quando criados devem fornecer um versionamento unico na tag(--tag tag:123version123...)
