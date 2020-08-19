@@ -235,12 +235,15 @@ This project try to illustrate some usual structures, features and applications 
     - pods        ->  containers set strongly tied. They may be highly dynamic and replacable, which only makes them viable defining through deployments.
     - deployments ->  define a template for a set of pods to master process achieve the system desired state, replacing them whenever is needed.
     - services    ->  provide connection to other objects(needed because objects may not be static, changing name/IP often). There are some types of services:
-      -- nodeport:   provides a access port to other objects inside the node and a port to the external host(not usually used in production)      
-      -- clusterIP:  provides a access port only to other objects inside the node.
+      -- nodeport:  provides a access port to other objects inside the node and a port for outside(not usually used in production)      
+      -- clusterIP: provides a access port only to other objects inside the node.
+      -- ingress:   expose access to objects from outside. Currently using nginx ingress controller from https://kubernetes.github.io/ingress-nginx/
     - pv          ->  persistant volume outside a pod lifecycle, which doesn't make it mutable. Useful to save data and it's created using a pvc.
     - pvc         ->  persistant volume claim, wich are storage requirements for a PV, carrying the storage information for master process to allocate.
   
-  Testing is made using [minikube] and a [Virtual Machine], hence localhost it's not accessible and the application should be accessed through `minikube ip`.
+  Testing is made using [minikube] and a [Virtual Machine], hence localhost it's not accessible and the application should be accessed through `minikube ip` after starting it with `minikube start`.
+  
+  There is a minikube dashboard providing allowing take actions over the running cluster, to access it run the command `minikube dashboard`. Remember to avoid create objects or do any sort of imperative action and prefere the descritive approach.
   
   Some imperative commands are used to get information about the objects inside the running system or perform some actions that aren't achieavable only with the config files. These commands are made throught the command-line tool [kubectl]
 
