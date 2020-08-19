@@ -119,6 +119,8 @@ This project try to illustrate some usual structures, features and applications 
 
  - [Docker] - Services containerization (vscode extension should also be installed)
  
+ Provides isolation and a standard system in a container for applications to run.
+ 
   Each service has a `Dockerfile` and `Dockerfile.dev` with a few configurations to create a node js container image and copy the server inside of it,for production and development consecutivelly(`.dev` is useful for automatic changes and testing).
   
   A `.dockerignore` is also set to filter files copied to the container.
@@ -164,7 +166,7 @@ This project try to illustrate some usual structures, features and applications 
   
   Building multiple containers may be hard, so a [docker-compose] is required to handle this kind of situation.
   
-  Inside `services/_deployments` folder there is a `docker-compose.yml` file describing the construction of each service inside this project for production. 
+  Inside `/services/_deployments` folder there is a `docker-compose.yml` file describing the construction of each service inside this project for production. 
   
   Also has a `docker-compose.dev.yml` describing the same construction but for development(the difference is that `.dev` file configures a volume to share host source folder to the container and make automatic changes when update files and restart server with nodemon)
   
@@ -218,57 +220,70 @@ This project try to illustrate some usual structures, features and applications 
 
 <br/><img src="https://kubernetes.io/images/favicon.png" width="auto" height="64px">
 
- - [Kubernetes] - Containers Orchestration (vscode extension should also be installed)
+ - [Kubernetes] - Containers Orchestration (vscode extension should also be installed)   
  
-  Kubernetes requires images already built with docker or docker-compose tools.
+  Kubernetes requires images already built with docker or docker-compose tools(and pushed to a registry like docker hub to make things easier).
  
-  Testing is made using [minikube] and a [Virtual Machine], hence localhost it's not accessible and the application should be accessed through `minikube ip`.   
- 
-  pods        -> conjunto de containers fortemente conectados(parametros imutaveis portanto inviaveis em prod) => constantemente sendo atualizadas/substituidas
-  deployment  -> capaz de criar pods, especificar replicas, template e outras especicações possibilitando alteração dos parametros dos pods(deletando/atualizando)
-  service     -> capaz de fazer a ligação automatica do exterior aos pods criados(que estão sendo sempre recriados e tem ips modificados constantemente)
-    nodeport:   fornece portas de acesso para os outros objetos dentro do nó e para o exterior
-    cluster     fornece porta de acesso apenas para objetos dentro do próprio nó
-  pvc         -> 
+  A Kubernetes cluster is a set of Virtual Machines, called Nodes, hosting a group of objects, that may host containers, and are managed by a Master. The containers inside objects are easly scalable to a number of replicas and have other tools to maintain their funcionality.
 
-  [kubectl]
+  With a descritive approach, the desired state of a system is enforced to the master throught a `.yml` config file or folder containing theses config files. Examples of these configuration files are in `/services/_deployments/k8s`, which builds a basic architecture for some services in this project.
+  
+  The master works to build and maintain the system desired state with it's objects.
+  
+  The most common kinds of objects are:
+  
+    - pods        ->  containers set strongly tied. They may be highly dynamic and replacable, which only makes them viable defining through deployments.
+    - deployments ->  define a template for a set of pods to master process achieve the system desired state, replacing them whenever is needed.
+    - services    ->  provide connection to other objects(needed because objects may not be static, changing name/IP often). There are some types of services:
+      -- nodeport:   provides a access port to other objects inside the node and a port to the external host(not usually used in production)      
+      -- clusterIP:  provides a access port only to other objects inside the node.
+    - pv          ->  persistant volume outside a pod lifecycle, which doesn't make it mutable. Useful to save data and it's created using a pvc.
+    - pvc         ->  persistant volume claim, wich are storage requirements for a PV, carrying the storage information for master process to allocate.
+  
+  Testing is made using [minikube] and a [Virtual Machine], hence localhost it's not accessible and the application should be accessed through `minikube ip`.
+  
+  Some imperative commands are used to get information about the objects inside the running system or perform some actions that aren't achieavable only with the config files. These commands are made throught the command-line tool [kubectl]
 
-  Fazendo uma abordagem descritiva, os objetos são criados/modificados através de um arquivo de configuração `.yml` pelo comando `kubectl apply -f <file>`
-  
-  kubectl apply -f <pathTo Folder/ConfigFile.yml>
+  kubectl common CLI:
+  ```bash
+    apply desired state to master:                  kubectl apply -f <folder/configFile.yml>
 
-  kubectl [command] [object-type] [<object-names>]
-    - commands:   get ... -o wide
-                  describe
-                  logs
-                  delete
-    - types:      pods
-                  services
-  
-  kubectl get storageclass        -> get options of provisioners to create persistant volumes. May be default minikube(allocates host's HD), AWS, GCP, Azure, etc
-  kubectl describe storageclass   -> describe provisioners
-  kubectl get pv                  -> get all persistant volumes created
-  kubectl get pvc                 -> get all persistant volumes claims(requirements for storage) created
-  kubectl logs <pod>
-  kubectl exec -it <pod-name> /bin/bash
-  
-  imperative cleanup:
-  kubectl delete deployments --all
-  kubectl delete services --all
-  kubectl delete pods --all
-  kubectl delete daemonset --all
-  
-  referências:  https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get
-                https://kubernetes.io/docs/reference/kubectl/overview/
+    generic commands:
+    kubectl <command> <object-type> [<object-names>] [<flags>]
+      - commands:   get ... [-o wide]
+                    describe                  
+                    delete [--all]
+      - types:      pods
+                    services
+                    pv 
+                    pvc
+                    secrets
+                    storageclass
+
+    extra commands:
+    get logs from pod container:                    kubectl logs <pod>
+    execute command inside pod/container:           kubectl exec -it <pod-name> <command-in-container>  
+    create secret manually:                         kubectl create secret generic <secret-name> --from-literal key=value 
+    redirect local docker commands to VM docker:    eval $(minikube docker-env)
+
+    kubernetes ignore unchanged files, even when images are updated. So to update a modified image it's needed to apply some tag version and update imperativelly:
+    modify deployment image manually:               kubectl set image deployment/<object-name> <container-name> = <fullImageNameTaggedWithVersion>
+
+    imperative cleanup:
+    kubectl delete deployments --all
+    kubectl delete services --all
+    kubectl delete pods --all  
+    kubectl delete pv --all
+    kubectl delete pvc --all
+  ```
+
 
   
-  Ferramenta util para exploração e teste:
-  carrega as variaveis de ambiente do docker da VM no terminal atual, fazendo os comandos docker se aplicarem à VM: eval $(minikube docker-env)
+  referências:  
   
-  Gambiarra para atualizar a imagem do deployment utilizando uma abordagem imperativa com o comando abaixo(pode ser necessario deletar o cache de images usando o eval acima).
-  Os containeres quando criados devem fornecer um versionamento unico na tag(--tag tag:123version123...)
-  kubectl set image deployment/<object-type> <container-name> = <fullImageNameTagWithVersion>
-  
+  https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get
+  https://kubernetes.io/docs/reference/kubectl/overview/
+
   
   
   
@@ -359,7 +374,7 @@ This project try to illustrate some usual structures, features and applications 
 [redis]: <https://www.npmjs.com/package/redis>
 [socket.io]:<https://socket.io/>
 
-[Kubernetes]: <https://kubernetes.io/pt/>
+[Kubernetes]: <https://kubernetes.io/>
 [kubectl]: <https://kubernetes.io/docs/reference/kubectl/overview/>
 [minikube]: <https://kubernetes.io/docs/setup/learning-environment/minikube/>
 [Virtual Machine]: <https://www.virtualbox.org/wiki/Linux_Downloads>
