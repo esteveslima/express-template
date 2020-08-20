@@ -115,6 +115,24 @@ This project try to illustrate some usual structures, features and applications 
 <br/><br/>
 ## Deployment features
 
+
+
+<br/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/220px-Nginx_logo.svg.png" width="auto" height="32px">      
+ 
+ - [Nginx] - Load balance / Reverse proxy server
+       
+      `nginx` folder has a Dockerfile configuration that creates a nginx image and copies the `nginx/nginx.conf` inside the container with the desired configuration.
+      
+      For load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `nginx/nginx.conf` file.
+
+      - ~~***TODO***~~: 
+        - Understand better nginx configurations for reverse proxy,load balancing and headers setup.
+        - API gateway setup with nginx.
+
+
+
+
+
 <br/><img src="https://media-exp1.licdn.com/dms/image/C560BAQEyEAwtp40d0A/company-logo_200_200/0?e=2159024400&v=beta&t=EPJvNJlim1cjQJvPU9LF62pYVDT9k9sWml6OrrYPrhA" width="auto" height="64px">
 
  - [Docker] - Services containerization (vscode extension should also be installed)
@@ -218,6 +236,9 @@ This project try to illustrate some usual structures, features and applications 
   - find a way to configure ssh into containers
 
 
+
+
+
 <br/><img src="https://kubernetes.io/images/favicon.png" width="auto" height="64px">
 
  - [Kubernetes] - Containers Orchestration (vscode extension should also be installed)   
@@ -243,7 +264,7 @@ This project try to illustrate some usual structures, features and applications 
   
   Testing is made using [minikube] and a [Virtual Machine], hence localhost it's not accessible and the application should be accessed through `minikube ip` after starting it with `minikube start`.
   
-  There is a minikube dashboard providing allowing take actions over the running cluster, to access it run the command `minikube dashboard`. Remember to avoid create objects or do any sort of imperative action and prefere the descritive approach.
+  There is a minikube dashboard allowing take actions over the running cluster, to access it run the command `minikube dashboard`. Remember to avoid create objects or do any sort of imperative action and prefere the descritive approach.
   
   Some imperative commands are used to get information about the objects inside the running system or perform some actions that aren't achieavable only with the config files. These commands are made throught the command-line tool [kubectl]
 
@@ -258,6 +279,7 @@ This project try to illustrate some usual structures, features and applications 
                     delete [--all]
       - types:      pods
                     services
+                    ingress
                     pv 
                     pvc
                     secrets
@@ -281,28 +303,20 @@ This project try to illustrate some usual structures, features and applications 
   ```
 
 
-  
+
   referências:  
   
   https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get
   https://kubernetes.io/docs/reference/kubectl/overview/
 
-  
-  
-  
-      
-      
-<br/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/220px-Nginx_logo.svg.png" width="auto" height="32px">      
- 
- - [Nginx] - Load balance / Reverse proxy server
-       
-      `nginx` folder has a Dockerfile configuration that creates a nginx image and copies the `nginx/nginx.conf` inside the container with the desired configuration.
-      
-      For load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `nginx/nginx.conf` file.
+  - ~~***TODO***~~: 
+    - Customize nginx ingress controller and ssl certificates    
+    - Create and handle secrets    
+    - Cluster security/auth    
+    - Cloud provisioners examples for deployment    
+    - Test distributed nodes and multi clusters
 
-      - ~~***TODO***~~: 
-        - Understand better nginx configurations for reverse proxy,load balancing and headers setup.
-        - API gateway setup with nginx.
+
 
 
 
