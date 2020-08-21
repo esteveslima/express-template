@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment                                  # allows to create a set of dynamic pods
+metadata:
+  name: base-service-deployment                   # deployment name
+spec:
+  replicas: 1                                     # number of created replicas
+  selector:
+    matchLabels:
+      component: base-service                     # allows deployment to handle pods created by master
+  template:
+    metadata:
+      labels:
+        component: base-service                   # arbitrary key/value label to allow deployments and services to handle the pods, which may be dynamic and change frequently
+    spec:
+      containers:
+      - name: base-service-container              # container name
+        image: esteveslima/base-service-image:tag # image pulled from hub(pulling local images require another steps executing from within VM's container)        
+        env:                                      # setting environment variables to the containers
+        - name: LOGGING
+          value: 'false'
+        resources:
+          limits:                                 # limiting pod's resources
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080                     # port used by the container's server

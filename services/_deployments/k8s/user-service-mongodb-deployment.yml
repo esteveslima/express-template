@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-mongodb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: user-service-mongodb
+  template:
+    metadata:
+      labels:
+        component: user-service-mongodb
+    spec:
+      volumes:                                      # volume created in deployment made to allocate storage
+        - name : user-service-mongodb-storage
+          persistentVolumeClaim:
+              claimName: user-service-mongodb-pvc   # pvc's name with the requirements for storage
+      containers:
+      - name: user-service-mongodb
+        image: mongo
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        volumeMounts:
+        - name: user-service-mongodb-storage        # deployment volume that the container refers to
+          mountPath: /data/db                       # directory with data to backup
+        ports:
+        - containerPort: 27017                      # default mongodb port

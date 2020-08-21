@@ -1,5 +1,8 @@
-# Use the official image as a parent image.
-FROM node:current as nodeBuilderStage
+# Use the official image as a parent image(Beware of the choice).
+FROM node:12-alpine as nodeBuilderStage
+
+# Install extra useful packages for alpine version
+RUN apk add --no-cache curl && apk add --no-cache bash
 
 # Set the working directory.
 WORKDIR /service

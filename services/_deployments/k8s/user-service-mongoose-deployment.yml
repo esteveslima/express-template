@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-mongoose-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: user-service-mongoose
+  template:
+    metadata:
+      labels:
+        component: user-service-mongoose
+    spec:      
+      containers:
+      - name: user-service-mongoose-container
+        image: esteveslima/user-service-mongoose-image:tag
+        env:
+        - name: LOGGING
+          value: 'false'
+        - name: MONGO_URI                                                                         # env variable to connect with local mongodb in another deployment
+          value: mongodb://user-service-mongodb-cluster-ip-service:27017/user-service-mongodb     # referring to mongodb cluster ip service with default port
+        #- name: MONGO_USER                                                                        # setting env variable from secret created imperatively
+        #  valueFrom:
+        #      secretKeyRef:
+        #        name: mongo-auth                                                                  # created one secreted with this name containing two auth key/value pairs
+        #        key: USER
+        #- name: MONGO_PASS
+        #  valueFrom:
+        #      secretKeyRef:
+        #        name: mongo-auth
+        #        key: PASS
+        resources:
+          limits:                                          
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080

@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress                                                       # allow access from outside(may take time to start)
+metadata: 
+  name: ingress-service                                             
+  annotations:
+    kubernetes.io/ingress.class: nginx                              # using nginx ingress from https://kubernetes.github.io/ingress-nginx/
+    nginx.ingress.kubernetes.io/rewrite-target: /$2                 # removing the first part of the url path assigned below for routing
+spec:
+  rules:
+    - http:
+        paths: 
+          - path: /base-service(/|$)(.*)                            # create a separate route for the service(which will be removed from url by rewrite-target)
+            backend:
+              serviceName: base-service-cluster-ip-service
+              servicePort: 8000
+          - path: /user-service-mongoose(/|$)(.*)
+            backend:
+              serviceName: user-service-mongoose-cluster-ip-service
+              servicePort: 8001

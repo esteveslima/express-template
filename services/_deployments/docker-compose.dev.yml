@@ -1,0 +1,97 @@
+# This file specify the construction of multiple containers using Dockerfile with some general configuration with more broad scope
+# In this example the services has no port exposed to host, the entry point should be through nginx witch has a loadbalance/reverse proxy configured
+# The process of building the container and other essencial steps should be done in Dockerfile
+#
+# These containers share the same network and can reference each other as host by the service name
+# In this example all services within this projects are being build, but they doesn't share any connection
+# 
+# Environment variables are set by a package(dotenv) in Express project, but they can be 'overriden' in this file
+#
+# Using an extra container from https://hub.docker.com/r/willfarrell/autoheal/ to perform automatic restart on unhealthy status
+#
+# This is a construction for the development server, containers share directories with host using volumes. 
+# This way any automatic modification to the files are imediatly reflected on server for testing(except node_modules)
+# For the production server, the volumes should be removed.
+#
+# This file requires to be reffered with --file to be executed
+#
+
+version: '3'
+services:
+    nginx-server:                                                               # nginx server that will serve as entry point for this compose project        
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
+        depends_on:                                                             # set an order of dependency for starting/stopping services
+            - base-service
+            - user-service-mongoose
+        restart: always
+        ports: 
+            - "8080:80"
+    autoheal:                                                                   # useful package to restore unhealthy containers automatically        
+        image: willfarrell/autoheal        
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+            - AUTOHEAL_CONTAINER_LABEL=all
+            - AUTOHEAL_INTERVAL=30
+            - AUTOHEAL_START_PERIOD=15
+        restart: always
+    base-service:        
+        image: esteveslima/base-service-image:tag                               # tag image with username after build, enabling push to hub 
+        build:
+            context: ../base-service
+            dockerfile: Dockerfile.dev
+        deploy:
+            replicas: 2                                                         # create replicas, require --compatibility flag to work without docker swarm
+            restart_policy:
+                condition: on-failure                                           # replaces restart policy
+        volumes:                                                                # set a volume to 'sync' host files with container
+            - ../base-service:/service
+            - /service/node_modules
+        environment:
+            - LOGGING=false                
+    user-service-mongoose:        
+        image: esteveslima/user-service-mongoose-image:tag                      
+        build:
+            context: ../user-service-mongoose
+            dockerfile: Dockerfile.dev
+        deploy:
+            replicas: 2
+            restart_policy:
+                condition: on-failure
+        volumes:
+            - ../user-service-mongoose:/service
+            - /service/node_modules
+        depends_on:                                                             
+            - mongo-database
+        environment:
+            - LOGGING=false
+            - JWT_SECRET=userOverriden                                          # create env variable, which won't be replaced by dotenv node package
+            - MONGO_URI=mongodb://mongo-database:27017/user-service-mongodb     # local database from mongodb container                                    
+    mongo-database:                                                             # mongo container for local database option
+        image: mongo
+        volumes:
+            - ../user-service-mongodb-storage:/data/db                          # set a volume for database data
+        environment:
+            - MONGO_INITDB_DATABASE=user-service-mongodb                        # creates the databased used by user-service-mongoose container
+            #- MONGO_INITDB_ROOT_USERNAME=user                                  # set auth credentials
+            #- MONGO_INITDB_ROOT_PASSWORD=password
+        restart: always
+        expose:
+            - '27017'                                                           # expose default mongodb port only for containers
+        
+
+            
+
+
+# Possible useful definitions(currently may be not in use)
+#
+#   - build: network
+#   - command
+#   - depends_on
+#   - deploy
+#   - env_file
+#   - logging
+#   - volumes: long syntax
+#     
