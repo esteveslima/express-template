@@ -121,12 +121,14 @@ This project try to illustrate some usual structures, features and applications 
  
  - [Nginx] - Load balance / Reverse proxy server
        
-      `nginx` folder has a Dockerfile configuration that creates a nginx image and copies the `nginx/nginx.conf` inside the container with the desired configuration.
+      `/services/_deployments/nginx` folder has a Dockerfile configuration that creates a nginx image and copies the `nginx/nginx.conf` inside the container with the desired configuration. The current `.conf` file configure a load balancer for each service defined in `docker-compose.yml` with reverse proxy routing.
       
-      For load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `nginx/nginx.conf` file.
+      Building manual load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `nginx/nginx.conf` file.
+      
+      Using nginx as ingress crontroller for kubernetes, but it's configuration is made within it's ingress `.yml` file with another syntax.
 
       - ~~***TODO***~~: 
-        - Understand better nginx configurations for reverse proxy,load balancing and headers setup.
+        - Understand better nginx configurations for reverse proxy, load balancing, headers and ssl setup.
         - API gateway setup with nginx.
 
 
@@ -197,6 +199,7 @@ This project try to illustrate some usual structures, features and applications 
   **if out of docker-compose file context or with multiple files, it should specify including --file before docker-compose command.
   compose commands general options(before commands):   
     --file <dockerComposefilePath/docker-compose.yml>   ->  specify docker-compose file
+    --compatibility                                     ->  useful to run deploy.replicas in compose files
     --project-name <name>                               ->  
     --log-level <level>                                 ->  
     
@@ -233,7 +236,7 @@ This project try to illustrate some usual structures, features and applications 
 
   - find a way to handle sensitive data and configure containers in configuration files more easily
   
-  - find a way to configure ssh into containers
+  - find a way to configure ssh and ssl into containers
 
 
 
@@ -312,7 +315,7 @@ This project try to illustrate some usual structures, features and applications 
   - ~~***TODO***~~: 
     - Customize nginx ingress controller and ssl certificates    
     - Create and handle secrets    
-    - Cluster security/auth    
+    - Cluster security/auth credentials/health
     - Cloud provisioners examples for deployment    
     - Test distributed nodes and multi clusters
 
