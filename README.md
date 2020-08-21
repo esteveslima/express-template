@@ -60,7 +60,7 @@ This project try to illustrate some usual structures, features and applications 
     - ***Contain simple examples***: simple examples covering routing and controllers(upload and email examples, in addition to errors demonstration);    
     - ***HTTPS Structure***: Structure provided, ~~but not in use~~, alongside http server at `index.js`;
       - ~~***TODO***~~: Understand better the generation of valid ssl certificates(self signed certificates using letsencrypt).
-    - ***Decoupled packages***: they are simply imported and used, all it's configurations are made within a proper file at `/src/helpers/`;
+    - ***Decoupled packages***: they are simply imported and used, all it's configurations are made inside a proper file at `/src/helpers/`;
     - ***Loader structure***: a more modular way to import and setup modules at `/src/loaders/`, which are imported at `index.js` before setup servers and start listening;
     - ***3 layer architecture***: clear separation of routing, business logic in controllers and data access in dao with their models. Middlewares added to provide request adjust and validation;
     - ***Router construction***: express router demonstration with subrouters at `/src/api/routes/`, with server status check and custom not found response;
@@ -69,7 +69,7 @@ This project try to illustrate some usual structures, features and applications 
     - ***Loggers***: [morgan] package at `/src/helpers/log/morgan.js` responsible for logging requests and [winston] package at `/src/helpers/log/winston.js` responsible for another kinds of logging. Logs can be enabled/disabled at .env configuration file
     - ***Centralized error handling***: file handler `/src/helpers/error/error-handler.js` put at the bottom of node call stack that handles possible errors, tracing errors for debugging using the package [stack-trace] at `/src/helpers/error/stack-trace.js` and logging with winston;
     - ***Standartized errors***: possibility to structure error responses at file `/src/helpers/error/structure/error-codes.js` and call them manually. Also possible to test unexpected errors at file `/src/helpers/error/structure/error-response.js` in runtime and build a proper error response;
-    - ***Easy async handling***: drying code with async handler at file `/src/helpers/async/async-handler.js` dispensing the use of try/catch blocks in async functions at files like `/src/api/controllers/*`. Using function at `/src/helpers/async/wrap-async.js` it's possible to wrap async handler in every function within file;
+    - ***Easy async handling***: drying code with async handler at file `/src/helpers/async/async-handler.js` dispensing the use of try/catch blocks in async functions at files like `/src/api/controllers/*`. Using function at `/src/helpers/async/wrap-async.js` it's possible to wrap async handler in every function inside the file;
     - ***Security***: few packages like [cors], [helmet], [hpp], [express-rate-limit], [xss-clean] to apply some security with headers or as middleware at file `/src/helpers/security/*`;
       - ~~***TODO***~~: Understand better these security headers for proper integration with front-end applications and servers like Nginx.
     - ***Email template***: simple email example using [nodemailer] at `/src/helpers/email/nodemailer.js` which can be improved to send customized html emails with dynamic data;
@@ -81,6 +81,8 @@ This project try to illustrate some usual structures, features and applications 
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/MongoDB_Logo.svg/220px-MongoDB_Logo.svg.png" width="auto" height="32px">
 
   - **user-service-mongoose**: Example service using ***MongoDB*** alongside [mongoose] for user data manipulation, authentication and authorization.
+  
+    ~~This service requires the creation of a mongodb cluster(local or remote) before running.~~
   
     - ***Middlewares usage demonstration***: usability example of middlewares for request handling at `/src/api/middlewares/*`;
     - ***Dao usage demonstration***: usability of dao at `/src/database/dao/*`, which should only access the ODM/ORM model to manipulate/search data and leave business logic to the controllers;
@@ -113,9 +115,31 @@ This project try to illustrate some usual structures, features and applications 
 <br/><br/>
 ## Deployment features
 
+
+
+<br/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/220px-Nginx_logo.svg.png" width="auto" height="32px">      
+ 
+ - [Nginx] - Load balance / Reverse proxy server
+       
+      `/services/_deployments/nginx` folder has a Dockerfile configuration that creates a nginx image and copies the `nginx/nginx.conf` inside the container with the desired configuration. The current `.conf` file configure a load balancer for each service defined in `docker-compose.yml` with reverse proxy routing.
+      
+      Building manual load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `nginx/nginx.conf` file.
+      
+      Using nginx as ingress crontroller for kubernetes, but it's configuration is made within it's ingress `.yml` file with another syntax.
+
+      - ~~***TODO***~~: 
+        - Understand better nginx configurations for reverse proxy, load balancing, headers and ssl setup.
+        - API gateway setup with nginx.
+
+
+
+
+
 <br/><img src="https://media-exp1.licdn.com/dms/image/C560BAQEyEAwtp40d0A/company-logo_200_200/0?e=2159024400&v=beta&t=EPJvNJlim1cjQJvPU9LF62pYVDT9k9sWml6OrrYPrhA" width="auto" height="64px">
 
  - [Docker] - Services containerization (vscode extension should also be installed)
+ 
+ Provides isolation and a standard system in a container for applications to run.
  
   Each service has a `Dockerfile` and `Dockerfile.dev` with a few configurations to create a node js container image and copy the server inside of it,for production and development consecutivelly(`.dev` is useful for automatic changes and testing).
   
@@ -127,9 +151,9 @@ This project try to illustrate some usual structures, features and applications 
 
   docker common CLI:
   ```bash
-  build image: 	                docker build --tag <image-tag-name> --file <dockerfilePath/Dockerfile> <projectRootPath>      //.dockerignore must be at context root
-  snapshot container img:         docker commit <containerId> <image-tag-name>
-  run img container:		docker run [options] --name <container-name> <image-tag-name> [optional cmd override]
+  build image: 	                docker build --tag <image-name:tag> --file <dockerfilePath/Dockerfile> <projectRootPath>      //.dockerignore must be at context root
+  snapshot container img:         docker commit <containerId> <image-name:tag>
+  run img container:		docker run [options] --name <container-name> <image-name:tag> [optional cmd override]
     options:  --publish <host_port>:<container_port>                          ->  forward host port to container port
               --restart <always/unless-stopped/on-failure>                    ->  restart policy
               --detach                                                        ->  run container in background
@@ -141,28 +165,33 @@ This project try to illustrate some usual structures, features and applications 
   list images:			docker images
   list containers:	        docker ps --all
   
-  remove image:		        docker rmi <imageId>
+  remove image:		        docker rmi <image-name:tag>
   remove all images:		docker rmi -f $(docker images -a - q)
   remove container:		docker rm <container-name>      
   remove all containers:		docker rm -vf $(docker ps -a -q)
-  remove stopped containers:      docker system prune
+  remove stopped containers:      docker system prune -a
 
   container logs:                 docker logs <container-name>
   execute command in container:	docker exec --privileged -it <container-name> <command>
-  explore running container:	docker exec -it <container-name> /bin/bash
+  explore running container:	docker exec -it <container-name> </bin/bash or sh>
   copy container file:		docker cp <containerId>:/from/root/file/path /host/path/target      
   get container ip:		docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container-name>
+  
+  login/logout hub/server:     docker login/logout
+  tag img before push:        docker tag <image-name:tag> <username/image-name:tag>
+  push image do hub/server:     docker push <username/image-name:tag>
   ```
       
   <br/>
   
-  Building multiple containers may be hard, so a docker-compose is required to handle this kind of situation.
+  Building multiple containers may be hard, so a [docker-compose] is required to handle this kind of situation.
   
-  Inside `services` folder there is a `docker-compose.yml` file describing the construction of each service within this project for production. 
+  Inside `/services/_deployments` folder there is a `docker-compose.yml` file describing the construction of each service inside this project for production. 
   
   Also has a `docker-compose.dev.yml` describing the same construction but for development(the difference is that `.dev` file configures a volume to share host source folder to the container and make automatic changes when update files and restart server with nodemon)
   
-  Containers built with this file share the same network, but in this example the services doesn't have any connection.
+  Containers built with this file **share the same network**, connections between containers must be made referencing by service name(usually assign to a env variable that is used inside server).
+  This solution is **only viable for non-distributed** containers/network, for distributed containers/network see Kubernetes below.
   
   docker-compose common CLI:
   ```bash
@@ -170,6 +199,7 @@ This project try to illustrate some usual structures, features and applications 
   **if out of docker-compose file context or with multiple files, it should specify including --file before docker-compose command.
   compose commands general options(before commands):   
     --file <dockerComposefilePath/docker-compose.yml>   ->  specify docker-compose file
+    --compatibility                                     ->  useful to run deploy.replicas in compose files
     --project-name <name>                               ->  
     --log-level <level>                                 ->  
     
@@ -192,6 +222,9 @@ This project try to illustrate some usual structures, features and applications 
   execute command in container:       docker-compose exec --privileged <service> <command>
   containers logs:                    docker-compose logs --tail="10" [<services>]            // last 10 lines of each service
   display running processes           docker-compose top
+  
+  login/logout hub/server:            docker login/logout
+  push compose images:                docker-compose push [<services>]              //services inside compose file must have username tagged
   ```
   
   Due to the current lack of support for automatic restarting on container's unhealthy status, to perform this feature it's being used an extra container https://hub.docker.com/r/willfarrell/autoheal/
@@ -203,26 +236,90 @@ This project try to illustrate some usual structures, features and applications 
 
   - find a way to handle sensitive data and configure containers in configuration files more easily
   
-  - find a way to configure ssh into containers
+  - find a way to configure ssh and ssl into containers
+
+
+
 
 
 <br/><img src="https://kubernetes.io/images/favicon.png" width="auto" height="64px">
 
- - [Kubernetes] - ~~***TODO***~~
-
-      
-      
-<br/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/220px-Nginx_logo.svg.png" width="auto" height="32px">      
+ - [Kubernetes] - Containers Orchestration (vscode extension should also be installed)   
  
- - [Nginx] - Load balance / Reverse proxy server
-       
-      `nginx` folder has a Dockerfile configuration that creates a nginx image and copies the `nginx/nginx.conf` inside the container with the desired configuration.
-      
-      For load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `nginx/nginx.conf` file.
+  Kubernetes requires images already built with docker or docker-compose tools(and pushed to a registry like docker hub to make things easier).
+ 
+  A Kubernetes cluster is a set of Virtual Machines, called Nodes, hosting a group of objects, that may host containers, and are managed by a Master. The containers inside objects are easly scalable to a number of replicas and have other tools to maintain their funcionality.
 
-      - ~~***TODO***~~: 
-        - Understand better nginx configurations for reverse proxy,load balancing and headers setup.
-        - API gateway setup with nginx.
+  With a descritive approach, the desired state of a system is enforced to the master throught a `.yml` config file or folder containing theses config files. Examples of these configuration files are in `/services/_deployments/k8s`, which builds a basic architecture for some services in this project.
+  
+  The master works to build and maintain the system desired state with it's objects.
+  
+  The most common kinds of objects are:
+  
+    - pods        ->  containers set strongly tied. They may be highly dynamic and replacable, which only makes them viable defining through deployments.
+    - deployments ->  define a template for a set of pods to master process achieve the system desired state, replacing them whenever is needed.
+    - services    ->  provide connection to other objects(needed because objects may not be static, changing name/IP often). There are some types of services:
+      -- nodeport:  provides a access port to other objects inside the node and a port for outside(not usually used in production)      
+      -- clusterIP: provides a access port only to other objects inside the node.
+      -- ingress:   expose access to objects from outside. Currently using nginx ingress controller from https://kubernetes.github.io/ingress-nginx/
+    - pv          ->  persistant volume outside a pod lifecycle, which doesn't make it mutable. Useful to save data and it's created using a pvc.
+    - pvc         ->  persistant volume claim, wich are storage requirements for a PV, carrying the storage information for master process to allocate.
+  
+  Testing is made using [minikube] and a [Virtual Machine], hence localhost it's not accessible and the application should be accessed through `minikube ip` after starting it with `minikube start`.
+  
+  There is a minikube dashboard allowing take actions over the running cluster, to access it run the command `minikube dashboard`. Remember to avoid create objects or do any sort of imperative action and prefere the descritive approach.
+  
+  Some imperative commands are used to get information about the objects inside the running system or perform some actions that aren't achieavable only with the config files. These commands are made throught the command-line tool [kubectl]
+
+  kubectl common CLI:
+  ```bash
+    apply desired state to master:                  kubectl apply -f <folder/configFile.yml>
+
+    generic commands:
+    kubectl <command> <object-type> [<object-names>] [<flags>]
+      - commands:   get ... [-o wide]
+                    describe                  
+                    delete [--all]
+      - types:      pods
+                    services
+                    ingress
+                    pv 
+                    pvc
+                    secrets
+                    storageclass
+
+    extra commands:
+    get logs from pod container:                    kubectl logs <pod>
+    execute command inside pod/container:           kubectl exec -it <pod-name> <command-in-container>  
+    create secret manually:                         kubectl create secret generic <secret-name> --from-literal key=value 
+    redirect local docker commands to VM docker:    eval $(minikube docker-env)
+
+    kubernetes ignore unchanged files, even when images are updated. So to update a modified image it's needed to apply some tag version and update imperativelly:
+    modify deployment image manually:               kubectl set image deployment/<object-name> <container-name> = <fullImageNameTaggedWithVersion>
+
+    imperative cleanup:
+    kubectl delete deployments --all
+    kubectl delete services --all
+    kubectl delete pods --all  
+    kubectl delete pv --all
+    kubectl delete pvc --all
+  ```
+
+
+
+  referências:  
+  
+  https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get
+  https://kubernetes.io/docs/reference/kubectl/overview/
+
+  - ~~***TODO***~~: 
+    - Customize nginx ingress controller and ssl certificates    
+    - Create and handle secrets    
+    - Cluster security/auth credentials/health
+    - Cloud provisioners examples for deployment    
+    - Test distributed nodes and multi clusters
+
+
 
 
 
@@ -297,6 +394,10 @@ This project try to illustrate some usual structures, features and applications 
 [redis]: <https://www.npmjs.com/package/redis>
 [socket.io]:<https://socket.io/>
 
-[Kubernetes]: <https://kubernetes.io/pt/>
+[Kubernetes]: <https://kubernetes.io/>
+[kubectl]: <https://kubernetes.io/docs/reference/kubectl/overview/>
+[minikube]: <https://kubernetes.io/docs/setup/learning-environment/minikube/>
+[Virtual Machine]: <https://www.virtualbox.org/wiki/Linux_Downloads>
 [Docker]: <https://www.docker.com/>
+[docker-compose]: <https://docs.docker.com/compose/>
 [Nginx]: <https://www.nginx.com/>
