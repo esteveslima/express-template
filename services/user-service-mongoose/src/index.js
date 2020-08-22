@@ -1,7 +1,7 @@
 // const fs = require('fs');
 // const https = require('https');
 const http = require('http');
-const loader = require('./src/loaders/loader');
+const loader = require('./loaders/loader');
 
 const setupServer = async () => {
   const app = await loader.load();

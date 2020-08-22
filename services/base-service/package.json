@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "env NODE_ENV=development nodemon --inspect index.js"
+    "start": "node src/index.js",
+    "dev": "env NODE_ENV=development nodemon --inspect src/index.js"
   },
   "author": "",
   "license": "ISC",
