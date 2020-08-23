@@ -12,7 +12,7 @@ COPY package.json .
 # Run install command inside image filesystem.
 RUN npm install --only=production
 
-# Copy the rest of project files from your host to your current location.
+# Copy project files from host to current location.
 COPY . .
 
 # Checking container's health, using server status requisition inside the container

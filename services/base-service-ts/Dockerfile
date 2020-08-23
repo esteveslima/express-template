@@ -12,6 +12,9 @@ COPY package.json .
 # Run install command inside image filesystem.
 RUN npm install --only=production
 
+# Transpile ts project to js
+RUN npm run build
+
 # Copy project files from host to current location.
 COPY . .
 
