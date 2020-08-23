@@ -1,3 +1,4 @@
+import type { ErrorRequestHandler } from 'express'; // eslint-disable-line no-unused-vars
 import ErrorResponse from './structure/error-response';
 import * as stackTrace from './stack-trace';
 import * as winston from '../log/winston';
@@ -5,15 +6,15 @@ import * as winston from '../log/winston';
 const errorsFileLogger = winston.loggers.get('errorsFileLogger');
 const errorsConsoleLogger = winston.loggers.get('errorsConsoleLogger');
 
-export default (err, req, res, next) : void => {
+const errorHandler : ErrorRequestHandler = (err, req, res, next) : void => {
   // Last error trace
   const lastTrace = stackTrace.lastErrorTrace(err);
   const trace = {
-    file: lastTrace ? lastTrace.getFileName() : '?',
-    function: lastTrace ? lastTrace.getFunctionName() : '?',
+    file: lastTrace?.getFileName() ?? '?',
+    function: lastTrace?.getFunctionName() ?? '?',
     position: {
-      line: lastTrace ? lastTrace.getLineNumber() : '?',
-      column: lastTrace ? lastTrace.getColumnNumber() : '?',
+      line: lastTrace?.getLineNumber() ?? '?',
+      column: lastTrace?.getColumnNumber() ?? '?',
     },
   };
 
@@ -36,9 +37,11 @@ export default (err, req, res, next) : void => {
   }
 
   // Response based on the ErrorResponse object
-  res.status(errorResponse.error.httpCode).json({
+  res.status(errorResponse.error.httpCode as unknown as number).json({
     Status: false,
     Error: errorResponse.error.errorCode,
     Message: errorResponse.error.message,
   });
 };
+
+export default errorHandler;

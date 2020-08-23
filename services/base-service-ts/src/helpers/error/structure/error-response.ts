@@ -6,7 +6,7 @@ export default class ErrorResponse extends Error {
 
   result: any;
 
-  static errorCodes: typeof errorCodes = errorCodes;
+  static readonly errorCodes: typeof errorCodes = errorCodes;
 
   constructor(error, result) {
     super();

@@ -4,7 +4,7 @@
 import nodemailer from 'nodemailer';
 // import fs from 'fs';
 
-export const sendEmailTo = (targetEmail) => {
+export const sendEmailTo = (targetEmail) : Promise<boolean> => {
   const mailAccountUser = process.env.EMAIL;
   const mailAccountPassword = process.env.EMAIL_PASS;
   const fromEmailAddress = mailAccountUser;
@@ -32,7 +32,7 @@ export const sendEmailTo = (targetEmail) => {
   };
 
   // wrapping callback in a promise for proper response
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) : void => {
     transport.sendMail(mail, (error/* , response */) => {
       transport.close();
       if (error) {

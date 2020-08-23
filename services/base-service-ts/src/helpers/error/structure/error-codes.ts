@@ -6,7 +6,7 @@
 
 interface IerrorCodes {
   // [error: string] : Ierror
-  [error: string] : {
+  [errorName: string] : {
     errorCode: number,
     httpCode: number,
     message: string

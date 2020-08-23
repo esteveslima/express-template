@@ -1,7 +1,8 @@
+import type { RequestHandler } from 'express'; // eslint-disable-line no-unused-vars
 import * as wrapAsync from '../../helpers/async/wrap-async';
 import ErrorResponse from '../../helpers/error/structure/error-response';
 
-exports.adjustFunction = (req, res, next) => {
+export const adjustFunction : RequestHandler = (req, res, next) : void => {
   next();
 };
 

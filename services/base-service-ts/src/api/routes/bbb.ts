@@ -2,7 +2,7 @@ import express from 'express';
 
 import * as bbb from '../controllers/bbb';
 
-export const joinToRouter = (mainRouter) => {
+export const joinToRouter = (mainRouter: express.Router) : void => {
   const bbbRouter = express.Router();
   mainRouter.use('/bbb', bbbRouter);
 

@@ -1,6 +1,6 @@
 import helmet from 'helmet';
 
-export const setupHelmet = () => {
+export const setupHelmet = () : typeof helmet => {
   const helmetOptions = {
     hsts: true,
     contentSecurityPolicy: {

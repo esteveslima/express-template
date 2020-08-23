@@ -9,7 +9,7 @@ import * as morgan from '../../helpers/log/morgan';
 import router from '../../api/routes/router';
 import errorHandler from '../../helpers/error/error-handler';
 
-export default () => {
+export default () : express.Application => {
   const app = express();
 
   // Body parser

@@ -3,16 +3,16 @@ import * as path from 'path';
 import * as fs from 'fs';
 import ErrorResponse from '../error/structure/error-response';
 
-const createFolder = (folderPath) => {
+const createFolder = (folderPath: string) : string => {
   if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath);
   }
   return folderPath;
 };
 
-export const fileUploadPath = path.join(__dirname, '../../../resources/uploads');
+export const fileUploadPath: string = path.join(__dirname, '../../../resources/uploads');
 
-export const fileUpload = (payload, fileName = Date.now()) => {
+export const fileUpload = (payload, fileName = Date.now()) : Promise<object> => {
   const formidableOptions = {
     uploadDir: fileUploadPath,
     multiples: false,
@@ -33,7 +33,7 @@ export const fileUpload = (payload, fileName = Date.now()) => {
   };
 
   // wrapping callback in a promise for proper response
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) : void => {
     form.parse(payload, (err, fields, files) => {
       if (err) reject(err);
       const filesAccepted = Object.keys(files);

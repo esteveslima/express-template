@@ -2,11 +2,11 @@ import express from 'express';
 import * as aaaRouter from './aaa';
 import * as bbbRouter from './bbb';
 
-export default () => {
+export default () : express.Router => {
   const router = express.Router();
 
   // Server status response
-  router.get('/status', (req, res/* , next */) => {
+  router.get('/status', (req, res/* , next */) : void => {
     res.status(200).json({ Status: true });
   });
 
@@ -15,7 +15,7 @@ export default () => {
   bbbRouter.joinToRouter(router);
 
   // Not found(404) response
-  router.all('*', (req, res/* , next */) => {
+  router.all('*', (req, res/* , next */) : void => {
     res.status(404).json({ Status: false, message: 'Route not found' });
   });
 

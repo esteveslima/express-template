@@ -3,7 +3,7 @@
 import http from 'http';
 import loader from './loaders/loader';
 
-const setupServer = async () => {
+const setupServer = async () : Promise<void> => {
   const app = await loader();
 
   // Setup http server

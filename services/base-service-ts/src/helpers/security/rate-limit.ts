@@ -1,7 +1,7 @@
 import rateLimit from 'express-rate-limit';
 import ErrorResponse from '../error/structure/error-response';
 
-export const setupCustomRateLimit = (requestsNumber, timeWindow) => {
+export const setupCustomRateLimit = (requestsNumber, timeWindow) : typeof rateLimit => {
   const limiter = rateLimit({
     windowMs: timeWindow * 60 * 1000,
     max: requestsNumber,
@@ -12,7 +12,7 @@ export const setupCustomRateLimit = (requestsNumber, timeWindow) => {
   return limiter;
 };
 
-export const setupGeneralRateLimit = () => {
+export const setupGeneralRateLimit = () : typeof rateLimit => {
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // limit each IP to 100 requests per windowMs
@@ -23,7 +23,7 @@ export const setupGeneralRateLimit = () => {
   return limiter;
 };
 
-export const setupFileUploadRateLimit = () => {
+export const setupFileUploadRateLimit = () : typeof rateLimit => {
   const limiter = rateLimit({
     windowMs: 1 * 60 * 1000,
     max: 5,

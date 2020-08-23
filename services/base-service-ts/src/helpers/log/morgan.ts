@@ -4,7 +4,7 @@ import path from 'path';
 
 const requestsLogPath = path.join(__dirname, '../../../resources/logs/requests.log');
 
-export const setupMorgan = () => {
+export const setupMorgan = () : typeof morgan => {
   // Logging in console only for development
   if (process.env.NODE_ENV === 'development') {
     return morgan('dev');

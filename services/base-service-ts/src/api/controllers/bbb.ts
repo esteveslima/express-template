@@ -1,11 +1,12 @@
+import type { RequestHandler } from 'express'; // eslint-disable-line no-unused-vars
 import * as wrapAsync from '../../helpers/async/wrap-async';
 import ErrorResponse from '../../helpers/error/structure/error-response';
 
-export const registredErrorExample = (req, res) : never => {
+export const registredErrorExample : RequestHandler = (req, res) : never => {
   throw new ErrorResponse(ErrorResponse.errorCodes.WRONG_PARAMETERS, 'registredErrorExample');
 };
 
-export const unregistredErrorExample = (req, res) : void => {
+export const unregistredErrorExample : RequestHandler = (req, res) : void => {
   // Generates an unexpected error
   const pi = 3.14159;
   pi.toFixed(100000);

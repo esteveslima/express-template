@@ -1,7 +1,7 @@
 import winston from 'winston';
 
 const { format } = winston;
-const { combine, label, json } = format;
+const { combine, json } = format;
 
 // Path considering project root
 const errorsLogPath = 'resources/logs/errors.log';
