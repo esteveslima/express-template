@@ -2,7 +2,7 @@ const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
 
-const requestsLogPath = path.join(__dirname, '../../resources/logs/requests.log');
+const requestsLogPath = path.join(__dirname, '../../../resources/logs/requests.log');
 
 exports.setupMorgan = () => {
   // Logging in console only for development

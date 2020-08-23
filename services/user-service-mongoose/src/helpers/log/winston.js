@@ -4,7 +4,7 @@ const { format } = winston;
 const { combine, label, json } = format;
 
 // Path considering project root
-const logPath = 'src/resources/logs';
+const logPath = 'resources/logs';
 const daoLogPath = `${logPath}/dao.log`;
 const errorsLogPath = `${logPath}/errors.log`;
 

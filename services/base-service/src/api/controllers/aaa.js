@@ -1,6 +1,6 @@
 const wrapAsync = require('../../helpers/async/wrap-async');
 const ErrorResponse = require('../../helpers/error/structure/error-response');
-const formidable = require('../../helpers/upload/formidable.js');
+const formidable = require('../../helpers/upload/formidable');
 const nodemailer = require('../../helpers/email/nodemailer');
 
 exports.imageUploadExample = async (req, res) => {

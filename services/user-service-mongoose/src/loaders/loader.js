@@ -2,7 +2,7 @@ const dotenv = require('../helpers/env/dotenv');
 const expressLoader = require('./express/express');
 const mongooseLoader = require('./mongoose/mongoose');
 
-exports.load = async () => {
+module.exports = async () => {
   // Envirnoment Variables
   dotenv.setupDotenv();
 

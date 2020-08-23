@@ -4,7 +4,7 @@ const http = require('http');
 const loader = require('./loaders/loader');
 
 const setupServer = async () => {
-  const app = await loader.load();
+  const app = await loader();
 
   // Setup http server
   const httpServer = http.createServer(app);
@@ -12,8 +12,8 @@ const setupServer = async () => {
 
   // Setup https server
   /* const httpsCertificate = {
-    key: fs.readFileSync('./src/resources/ssl-tls/certificate.key', 'utf-8'),
-    cert: fs.readFileSync('./src/resources/ssl-tls/certificate.crt', 'utf-8'),
+    key: fs.readFileSync('./resources/ssl-tls/certificate.key', 'utf-8'),
+    cert: fs.readFileSync('./resources/ssl-tls/certificate.crt', 'utf-8'),
   };
   const httpsServer = https.createServer(httpsCertificate, app);
     httpsServer.listen(process.env.PORT_HTTPS, () => {

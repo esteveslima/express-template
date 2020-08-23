@@ -10,7 +10,7 @@ const createFolder = (folderPath) => {
   return folderPath;
 };
 
-const fileUploadPath = path.join(__dirname, '../../resources/uploads');
+const fileUploadPath = path.join(__dirname, '../../../resources/uploads');
 
 exports.fileUpload = (payload, userName) => {
   const formidableOptions = {

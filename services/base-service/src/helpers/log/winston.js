@@ -4,7 +4,7 @@ const { format } = winston;
 const { combine, label, json } = format;
 
 // Path considering project root
-const errorsLogPath = 'src/resources/logs/errors.log';
+const errorsLogPath = 'resources/logs/errors.log';
 
 winston.loggers.add('errorsFileLogger', {
   format: combine(

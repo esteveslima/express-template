@@ -1,7 +1,7 @@
 const dotenv = require('../helpers/env/dotenv');
 const expressLoader = require('./express/express');
 
-exports.load = async () => {
+module.exports = async () => {
   // Envirnoment Variables
   dotenv.setupDotenv();
 

@@ -6,7 +6,9 @@ exports.registredErrorExample = (req, res) => {
 };
 
 exports.unregistredErrorExample = (req, res) => {
-  console.log(not_declared_variable);
+  // Generates an unexpected error
+  const pi = 3.14159;
+  pi.toFixed(100000);
 };
 
 // Wrapping all functions for error catching
