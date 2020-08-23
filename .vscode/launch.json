@@ -5,15 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Nodemon",              //  With the modification on default node debug configuration...
             "type": "node",                 
             "request": "attach",            //  attach to running...
             "protocol": "inspector",        //...inspector process(scripts.dev)
-            "restart": true,                //  necessary for nodemon
-            "name": "Nodemon",              //  With the above modification on default node debug configuration...
+            "restart": true,                //  necessary for nodemon            
             "skipFiles": [                  //...should be possible to start debug mode attaching to scripts.dev(--inspect)...
-                "<node_internals>/**"       //...and debug using breakpoints in addition to nodemon
-            ],
-            "program": "${workspaceFolder}/index.js"
+                "node_modules/**",          //...and debug using breakpoints in addition to nodemon
+                "<node_internals>/**"       
+            ],            
         }
     ]
 }
