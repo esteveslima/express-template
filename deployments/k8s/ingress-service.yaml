@@ -13,7 +13,7 @@ spec:
             backend:
               serviceName: base-js-cluster-ip-service
               servicePort: 8000
-          - path: /user-service-mongoose(/|$)(.*)
+          - path: /user-mongoose(/|$)(.*)
             backend:
-              serviceName: user-service-mongoose-cluster-ip-service
+              serviceName: user-mongoose-cluster-ip-service
               servicePort: 8001

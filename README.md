@@ -80,7 +80,7 @@ This project try to illustrate some usual structures, features and applications 
   <br/><br/>
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/MongoDB_Logo.svg/220px-MongoDB_Logo.svg.png" width="auto" height="32px">
 
-  - **user-service-mongoose**: Example service using ***MongoDB*** alongside [mongoose] for user data manipulation, authentication and authorization.
+  - **user-mongoose**: Example service using ***MongoDB*** alongside [mongoose] for user data manipulation, authentication and authorization.
   
     ~~This service requires the creation of a mongodb cluster(local or remote) before running.~~
   
@@ -121,9 +121,9 @@ This project try to illustrate some usual structures, features and applications 
  
  - [Nginx] - Load balance / Reverse proxy server
        
-      `/templates/_deployments/nginx` folder has a Dockerfile configuration that creates a nginx image and copies the `nginx/nginx.conf` inside the container with the desired configuration. The current `.conf` file configure a load balancer for each service defined in `docker-compose.yml` with reverse proxy routing.
+      `/deployments/nginx` folder has a Dockerfile configuration that creates a nginx image and copies the `/nginx/nginx.conf` inside the container with the desired configuration. The current `.conf` file configure a load balancer for each service defined in `docker-compose.yml` with reverse proxy routing.
       
-      Building manual load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `nginx/nginx.conf` file.
+      Building manual load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `/nginx/nginx.conf` file.
       
       Using nginx as ingress crontroller for kubernetes, but it's configuration is made within it's ingress `.yml` file with another syntax.
 
@@ -186,7 +186,7 @@ This project try to illustrate some usual structures, features and applications 
   
   Building multiple containers may be hard, so a [docker-compose] is required to handle this kind of situation.
   
-  Inside `/templates/_deployments` folder there is a `docker-compose.yml` file describing the construction of each service inside this project for production. 
+  Inside `/deployments` folder there is a `docker-compose.yml` file describing the construction of each service inside this project for production. 
   
   Also has a `docker-compose.dev.yml` describing the same construction but for development(the difference is that `.dev` file configures a volume to share host source folder to the container and make automatic changes when update files and restart server with nodemon)
   
@@ -250,7 +250,7 @@ This project try to illustrate some usual structures, features and applications 
  
   A Kubernetes cluster is a set of Virtual Machines, called Nodes, hosting a group of objects, that may host containers, and are managed by a Master. The containers inside objects are easly scalable to a number of replicas and have other tools to maintain their funcionality.
 
-  With a descritive approach, the desired state of a system is enforced to the master throught a `.yml` config file or folder containing theses config files. Examples of these configuration files are in `/templates/_deployments/k8s`, which builds a basic architecture for some services in this project.
+  With a descritive approach, the desired state of a system is enforced to the master throught a `.yml` config file or folder containing theses config files. Examples of these configuration files are in `/deployments/k8s`, which builds a basic architecture for some services in this project.
   
   The master works to build and maintain the system desired state with it's objects.
   

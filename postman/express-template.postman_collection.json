@@ -24,12 +24,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/aaa/imageUploadExample",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_JS_ROUTE}}/aaa/imageUploadExample",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{BASE_JS_ROUTE}}",
 							"path": [
 								"aaa",
 								"imageUploadExample"
@@ -44,12 +44,12 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/aaa/emailExample",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_JS_ROUTE}}/aaa/emailExample",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{BASE_JS_ROUTE}}",
 							"path": [
 								"aaa",
 								"emailExample"
@@ -64,12 +64,12 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/bbb/unregistredErrorExample",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_JS_ROUTE}}/bbb/unregistredErrorExample",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{BASE_JS_ROUTE}}",
 							"path": [
 								"bbb",
 								"unregistredErrorExample"
@@ -84,12 +84,12 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/bbb/registredErrorExample",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_JS_ROUTE}}/bbb/registredErrorExample",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{BASE_JS_ROUTE}}",
 							"path": [
 								"bbb",
 								"registredErrorExample"
@@ -104,12 +104,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/status",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_JS_ROUTE}}/status",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{BASE_JS_ROUTE}}",
 							"path": [
 								"status"
 							]
@@ -121,7 +121,122 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "user-service-mongoose",
+			"name": "base-ts",
+			"item": [
+				{
+					"name": "aaa/imageUploadExample",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_TS_ROUTE}}/aaa/imageUploadExample",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "{{PORT}}{{BASE_TS_ROUTE}}",
+							"path": [
+								"aaa",
+								"imageUploadExample"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aaa/emailExample",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_TS_ROUTE}}/aaa/emailExample",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "{{PORT}}{{BASE_TS_ROUTE}}",
+							"path": [
+								"aaa",
+								"emailExample"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bbb/unregistredErrorExample",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_TS_ROUTE}}/bbb/unregistredErrorExample",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "{{PORT}}{{BASE_TS_ROUTE}}",
+							"path": [
+								"bbb",
+								"unregistredErrorExample"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bbb/registredErrorExample",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_TS_ROUTE}}/bbb/registredErrorExample",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "{{PORT}}{{BASE_TS_ROUTE}}",
+							"path": [
+								"bbb",
+								"registredErrorExample"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_TS_ROUTE}}/status",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "{{PORT}}{{BASE_TS_ROUTE}}",
+							"path": [
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "user-mongoose",
 			"item": [
 				{
 					"name": "user/create",
@@ -141,12 +256,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/user/public/create",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/user/public/create",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"user",
 								"public",
@@ -187,12 +302,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/user/pictureUpload",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/user/pictureUpload",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"user",
 								"pictureUpload"
@@ -229,12 +344,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/user/getPicture",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/user/getPicture",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"user",
 								"getPicture"
@@ -268,12 +383,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/user/update/:userName",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/user/update/:userName",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"user",
 								"update",
@@ -305,12 +420,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/user/get/:userName",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/user/get/:userName",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"user",
 								"get",
@@ -342,12 +457,12 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/user/delete/:userName",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/user/delete/:userName",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"user",
 								"delete",
@@ -393,12 +508,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/auth/public/login",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/auth/public/login",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"auth",
 								"public",
@@ -438,12 +553,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/auth/public/forgotPassword",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/auth/public/forgotPassword",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"auth",
 								"public",
@@ -483,12 +598,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/auth/public/restorePassword",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/auth/public/restorePassword",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"auth",
 								"public",
@@ -535,12 +650,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/user/changePassword",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/user/changePassword",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"user",
 								"changePassword"
@@ -586,12 +701,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/auth/logout",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/auth/logout",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"auth",
 								"logout"
@@ -606,12 +721,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{DOMAIN}}:8080/status",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/status",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
-							"port": "8080",
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
 								"status"
 							]

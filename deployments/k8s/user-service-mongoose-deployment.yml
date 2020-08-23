@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-service-mongoose-deployment
+  name: user-mongoose-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      component: user-service-mongoose
+      component: user-mongoose
   template:
     metadata:
       labels:
-        component: user-service-mongoose
+        component: user-mongoose
     spec:      
       containers:
-      - name: user-service-mongoose-container
-        image: esteveslima/user-service-mongoose-image:tag
+      - name: user-mongoose-container
+        image: esteveslima/user-mongoose-image:tag
         env:
         - name: LOGGING
           value: 'false'

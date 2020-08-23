@@ -24,7 +24,7 @@ services:
             dockerfile: Dockerfile
         depends_on:                                                             # set an order of dependency for starting/stopping services
             - base-js
-            - user-service-mongoose
+            - user-mongoose
         restart: always
         ports: 
             - "8080:80"
@@ -51,17 +51,17 @@ services:
             - /service/node_modules
         environment:
             - LOGGING=false                
-    user-service-mongoose:        
-        image: esteveslima/user-service-mongoose-image:tag                      
+    user-mongoose:        
+        image: esteveslima/user-mongoose-image:tag                      
         build:
-            context: ../user-service-mongoose
+            context: ../user-mongoose
             dockerfile: Dockerfile.dev
         deploy:
             replicas: 2
             restart_policy:
                 condition: on-failure
         volumes:
-            - ../user-service-mongoose:/service
+            - ../user-mongoose:/service
             - /service/node_modules
         depends_on:                                                             
             - mongo-database
@@ -74,7 +74,7 @@ services:
         volumes:
             - ../user-service-mongodb-storage:/data/db                          # set a volume for database data
         environment:
-            - MONGO_INITDB_DATABASE=user-service-mongodb                        # creates the databased used by user-service-mongoose container
+            - MONGO_INITDB_DATABASE=user-service-mongodb                        # creates the databased used by user-mongoose container
             #- MONGO_INITDB_ROOT_USERNAME=user                                  # set auth credentials
             #- MONGO_INITDB_ROOT_PASSWORD=password
         restart: always
