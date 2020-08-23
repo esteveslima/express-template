@@ -2,12 +2,12 @@
 gnome-terminal -e "
 bash -c \"
 
-docker stop base-service-container;
-docker rm base-service-container;
-docker rmi base-service-image;
+docker stop base-js-container;
+docker rm base-js-container;
+docker rmi base-js-image;
 
-docker build --tag base-service-image -f Dockerfile .;
-docker run --publish 8080:8080 --restart always --detach --name base-service-container base-service-image;
+docker build --tag base-js-image -f Dockerfile .;
+docker run --publish 8080:8080 --restart always --detach --name base-js-container base-js-image;
 
 docker ps -a;
 

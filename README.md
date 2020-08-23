@@ -55,7 +55,7 @@ This project try to illustrate some usual structures, features and applications 
     - Define a helper file inside config(maybe .env?) to map external urls to variables, making things easy in multiple containers and future configurations 
 
   <br/><br/>
-  - **base-service**: This service contains only basic functionalities and another projects/examples should extend it's structure.
+  - **base-js**: This service contains only basic functionalities and another projects/examples should extend it's structure.
   
     - ***Contain simple examples***: simple examples covering routing and controllers(upload and email examples, in addition to errors demonstration);    
     - ***HTTPS Structure***: Structure provided, ~~but not in use~~, alongside http server at `index.js`;
@@ -121,7 +121,7 @@ This project try to illustrate some usual structures, features and applications 
  
  - [Nginx] - Load balance / Reverse proxy server
        
-      `/services/_deployments/nginx` folder has a Dockerfile configuration that creates a nginx image and copies the `nginx/nginx.conf` inside the container with the desired configuration. The current `.conf` file configure a load balancer for each service defined in `docker-compose.yml` with reverse proxy routing.
+      `/templates/_deployments/nginx` folder has a Dockerfile configuration that creates a nginx image and copies the `nginx/nginx.conf` inside the container with the desired configuration. The current `.conf` file configure a load balancer for each service defined in `docker-compose.yml` with reverse proxy routing.
       
       Building manual load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `nginx/nginx.conf` file.
       
@@ -186,7 +186,7 @@ This project try to illustrate some usual structures, features and applications 
   
   Building multiple containers may be hard, so a [docker-compose] is required to handle this kind of situation.
   
-  Inside `/services/_deployments` folder there is a `docker-compose.yml` file describing the construction of each service inside this project for production. 
+  Inside `/templates/_deployments` folder there is a `docker-compose.yml` file describing the construction of each service inside this project for production. 
   
   Also has a `docker-compose.dev.yml` describing the same construction but for development(the difference is that `.dev` file configures a volume to share host source folder to the container and make automatic changes when update files and restart server with nodemon)
   
@@ -224,7 +224,7 @@ This project try to illustrate some usual structures, features and applications 
   display running processes           docker-compose top
   
   login/logout hub/server:            docker login/logout
-  push compose images:                docker-compose push [<services>]              //services inside compose file must have username tagged
+  push compose images:                docker-compose push [<services>]              //templates inside compose file must have username tagged
   ```
   
   Due to the current lack of support for automatic restarting on container's unhealthy status, to perform this feature it's being used an extra container https://hub.docker.com/r/willfarrell/autoheal/
@@ -250,7 +250,7 @@ This project try to illustrate some usual structures, features and applications 
  
   A Kubernetes cluster is a set of Virtual Machines, called Nodes, hosting a group of objects, that may host containers, and are managed by a Master. The containers inside objects are easly scalable to a number of replicas and have other tools to maintain their funcionality.
 
-  With a descritive approach, the desired state of a system is enforced to the master throught a `.yml` config file or folder containing theses config files. Examples of these configuration files are in `/services/_deployments/k8s`, which builds a basic architecture for some services in this project.
+  With a descritive approach, the desired state of a system is enforced to the master throught a `.yml` config file or folder containing theses config files. Examples of these configuration files are in `/templates/_deployments/k8s`, which builds a basic architecture for some services in this project.
   
   The master works to build and maintain the system desired state with it's objects.
   

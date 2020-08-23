@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "base-service",
+			"name": "base-js",
 			"item": [
 				{
 					"name": "aaa/imageUploadExample",

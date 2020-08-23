@@ -9,6 +9,12 @@
 #
 # Using an extra container from https://hub.docker.com/r/willfarrell/autoheal/ to perform automatic restart on unhealthy status
 #
+# This is a construction for the development server, containers share directories with host using volumes. 
+# This way any automatic modification to the files are imediatly reflected on server for testing(except node_modules)
+# For the production server, the volumes should be removed.
+#
+# This file requires to be reffered with --file to be executed
+#
 
 version: '3'
 services:
@@ -17,7 +23,7 @@ services:
             context: ./nginx
             dockerfile: Dockerfile
         depends_on:                                                             # set an order of dependency for starting/stopping services
-            - base-service
+            - base-js
             - user-service-mongoose
         restart: always
         ports: 
@@ -31,26 +37,32 @@ services:
             - AUTOHEAL_INTERVAL=30
             - AUTOHEAL_START_PERIOD=15
         restart: always
-    base-service:        
-        image: esteveslima/base-service-image:tag                               # tag image with username after build, enabling push to hub 
+    base-js:        
+        image: esteveslima/base-js-image:tag                               # tag image with username after build, enabling push to hub 
         build:
-            context: ../base-service
-            dockerfile: Dockerfile
+            context: ../base-js
+            dockerfile: Dockerfile.dev
         deploy:
             replicas: 2                                                         # create replicas, require --compatibility flag to work without docker swarm
             restart_policy:
                 condition: on-failure                                           # replaces restart policy
+        volumes:                                                                # set a volume to 'sync' host files with container
+            - ../base-js:/service
+            - /service/node_modules
         environment:
             - LOGGING=false                
     user-service-mongoose:        
         image: esteveslima/user-service-mongoose-image:tag                      
         build:
             context: ../user-service-mongoose
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.dev
         deploy:
             replicas: 2
             restart_policy:
                 condition: on-failure
+        volumes:
+            - ../user-service-mongoose:/service
+            - /service/node_modules
         depends_on:                                                             
             - mongo-database
         environment:
@@ -68,11 +80,11 @@ services:
         restart: always
         expose:
             - '27017'                                                           # expose default mongodb port only for containers
-
-
-
+        
 
             
+
+
 # Possible useful definitions(currently may be not in use)
 #
 #   - build: network
@@ -82,4 +94,4 @@ services:
 #   - env_file
 #   - logging
 #   - volumes: long syntax
-#                 
+#     

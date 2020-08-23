@@ -9,9 +9,9 @@ spec:
   rules:
     - http:
         paths: 
-          - path: /base-service(/|$)(.*)                            # create a separate route for the service(which will be removed from url by rewrite-target)
+          - path: /base-js(/|$)(.*)                            # create a separate route for the service(which will be removed from url by rewrite-target)
             backend:
-              serviceName: base-service-cluster-ip-service
+              serviceName: base-js-cluster-ip-service
               servicePort: 8000
           - path: /user-service-mongoose(/|$)(.*)
             backend:

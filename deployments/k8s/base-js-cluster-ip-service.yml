@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service                             # handle objects connections
 metadata:
-  name: base-service-cluster-ip-service   # service name
+  name: base-js-cluster-ip-service   # service name
 spec:
   type: ClusterIP                         # type that only allows connections from another objects inside the node, blocking outside connections
   selector:
-    component: base-service               # allows clusterIP to handle pods connection
+    component: base-js               # allows clusterIP to handle pods connection
   ports:
   - port: 8000                            # port exposed to other objects
     targetPort: 8080                      # port used by object's container's server
