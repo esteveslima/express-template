@@ -1,13 +1,13 @@
 import express from 'express';
-import * as cors from '../../helpers/security/cors';
-import * as helmet from '../../helpers/security/helmet';
-import * as hpp from '../../helpers/security/hpp';
-import * as xssClean from '../../helpers/security/xss-clean';
-import * as rateLimiter from '../../helpers/security/rate-limit';
-import * as morgan from '../../helpers/log/morgan';
+import * as cors from '../../services/security/cors';
+import * as helmet from '../../services/security/helmet';
+import * as hpp from '../../services/security/hpp';
+import * as xssClean from '../../services/security/xss-clean';
+import * as rateLimiter from '../../services/security/rate-limit';
+import * as morgan from '../../services/log/morgan';
 
 import router from '../../api/routes/router';
-import errorHandler from '../../helpers/error/error-handler';
+import errorHandler from '../../services/error/error-handler';
 
 export default () : express.Application => {
   const app = express();

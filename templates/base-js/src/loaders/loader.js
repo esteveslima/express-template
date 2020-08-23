@@ -1,4 +1,4 @@
-const dotenv = require('../helpers/env/dotenv');
+const dotenv = require('../services/env/dotenv');
 const expressLoader = require('./express/express');
 
 module.exports = async () => {

@@ -1,7 +1,7 @@
 const express = require('express');
 const aaa = require('../controllers/aaa');
 
-const rateLimiter = require('../../helpers/security/rate-limit');
+const rateLimiter = require('../../services/security/rate-limit');
 
 exports.joinToRouter = (mainRouter) => {
   const aaaRouter = express.Router();

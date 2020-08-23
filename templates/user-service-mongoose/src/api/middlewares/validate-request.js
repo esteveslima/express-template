@@ -1,6 +1,6 @@
-const wrapAsync = require('../../helpers/async/wrap-async');
+const wrapAsync = require('../../services/async/wrap-async');
 const userDao = require('../../database/dao/user');
-const ErrorResponse = require('../../helpers/error/structure/error-response');
+const ErrorResponse = require('../../services/error/structure/error-response');
 
 exports.validateUsername = async (req, res, next) => {
   const { userName } = req.params;

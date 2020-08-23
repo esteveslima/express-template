@@ -1,13 +1,13 @@
 const express = require('express');
-const cors = require('../../helpers/security/cors');
-const helmet = require('../../helpers/security/helmet');
-const hpp = require('../../helpers/security/hpp');
-const xssClean = require('../../helpers/security/xss-clean');
-const rateLimiter = require('../../helpers/security/rate-limit');
-const morgan = require('../../helpers/log/morgan');
+const cors = require('../../services/security/cors');
+const helmet = require('../../services/security/helmet');
+const hpp = require('../../services/security/hpp');
+const xssClean = require('../../services/security/xss-clean');
+const rateLimiter = require('../../services/security/rate-limit');
+const morgan = require('../../services/log/morgan');
 
 const router = require('../../api/routes/router');
-const errorHandler = require('../../helpers/error/error-handler');
+const errorHandler = require('../../services/error/error-handler');
 
 module.exports = () => {
   const app = express();

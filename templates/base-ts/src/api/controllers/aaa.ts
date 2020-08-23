@@ -1,8 +1,8 @@
 import type { RequestHandler } from 'express'; // eslint-disable-line no-unused-vars
-import * as wrapAsync from '../../helpers/async/wrap-async';
-import ErrorResponse from '../../helpers/error/structure/error-response';
-import * as formidable from '../../helpers/upload/formidable';
-import * as nodemailer from '../../helpers/email/nodemailer';
+import * as wrapAsync from '../../services/async/wrap-async';
+import ErrorResponse from '../../services/error/structure/error-response';
+import * as formidable from '../../services/upload/formidable';
+import * as nodemailer from '../../services/email/nodemailer';
 
 export const imageUploadExample : RequestHandler = async (req, res) : Promise<void> => {
   const uploadResult = await formidable.fileUpload(req);

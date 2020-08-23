@@ -1,7 +1,7 @@
-const wrapAsync = require('../../helpers/async/wrap-async');
-const ErrorResponse = require('../../helpers/error/structure/error-response');
+const wrapAsync = require('../../services/async/wrap-async');
+const ErrorResponse = require('../../services/error/structure/error-response');
 const userDao = require('../../database/dao/user');
-const formidable = require('../../helpers/upload/formidable');
+const formidable = require('../../services/upload/formidable');
 
 exports.getUser = async (req, res) => {
   const { userName } = req.params;

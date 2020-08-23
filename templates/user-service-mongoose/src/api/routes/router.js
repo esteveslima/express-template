@@ -2,7 +2,7 @@ const express = require('express');
 const userRouter = require('./user');
 const authRouter = require('./auth');
 
-const jwtAuth = require('../../helpers/auth/jwt');
+const jwtAuth = require('../../services/auth/jwt');
 const adjustMiddleware = require('../middlewares/adjust-request');
 
 module.exports = () => {

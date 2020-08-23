@@ -1,6 +1,6 @@
 import express from 'express';
 import * as aaa from '../controllers/aaa';
-import * as rateLimiter from '../../helpers/security/rate-limit';
+import * as rateLimiter from '../../services/security/rate-limit';
 
 export const joinToRouter = (mainRouter: express.Router) : void => {
   const aaaRouter = express.Router();

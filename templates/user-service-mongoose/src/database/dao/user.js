@@ -1,4 +1,4 @@
-const wrapLogger = require('../../helpers/log/wrap-logger');
+const wrapLogger = require('../../services/log/wrap-logger');
 const UserModel = require('../../models/user');
 
 exports.getUser = async (userName) => {

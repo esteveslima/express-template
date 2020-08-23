@@ -1,4 +1,4 @@
-import * as dotenv from '../helpers/env/dotenv';
+import * as dotenv from '../services/env/dotenv';
 import expressLoader from './express/express';
 
 export default async () => {

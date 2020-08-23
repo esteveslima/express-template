@@ -1,5 +1,5 @@
-const wrapAsync = require('../../helpers/async/wrap-async');
-const ErrorResponse = require('../../helpers/error/structure/error-response');
+const wrapAsync = require('../../services/async/wrap-async');
+const ErrorResponse = require('../../services/error/structure/error-response');
 
 exports.registredErrorExample = (req, res) => {
   throw new ErrorResponse(ErrorResponse.errorCodes.WRONG_PARAMETERS, 'registredErrorExample');
