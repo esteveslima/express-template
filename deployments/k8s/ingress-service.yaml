@@ -1,19 +1,23 @@
 apiVersion: extensions/v1beta1
-kind: Ingress                                                       # allow access from outside(may take time to start)
-metadata: 
+kind: Ingress                                                       # provide an entry point from outside node automatically on ports 80 and 443
+metadata:                                                           # these ports doesn't need to be specified in the browser and the ingress may take some time to start
   name: ingress-service                                             
   annotations:
-    kubernetes.io/ingress.class: nginx                              # using nginx ingress from https://kubernetes.github.io/ingress-nginx/
+    kubernetes.io/ingress.class: nginx                              # using nginx ingress from https://kubernetes.github.io/ingress-nginx/, read installation before testing(for minikube it failed a couple times to enable ingress)
     nginx.ingress.kubernetes.io/rewrite-target: /$2                 # removing the first part of the url path assigned below for routing
 spec:
   rules:
     - http:
         paths: 
-          - path: /base-js(/|$)(.*)                            # create a separate route for the service(which will be removed from url by rewrite-target)
+          - path: /base-js(/|$)(.*)                                 # create a separate route for the service(which will be removed from url by rewrite-target)
             backend:
               serviceName: base-js-cluster-ip-service
               servicePort: 8000
+          - path: /base-ts(/|$)(.*)
+            backend:
+              serviceName: base-ts-cluster-ip-service
+              servicePort: 8001
           - path: /user-mongoose(/|$)(.*)
             backend:
               serviceName: user-mongoose-cluster-ip-service
-              servicePort: 8001
+              servicePort: 8002

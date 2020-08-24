@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment                                  
+metadata:
+  name: base-ts-deployment                   
+spec:
+  replicas: 1                                     
+  selector:
+    matchLabels:
+      component: base-ts                    
+  template:
+    metadata:
+      labels:
+        component: base-ts                   
+    spec:
+      containers:
+      - name: base-ts-container             
+        image: esteveslima/base-ts-image:tag        
+        env:                                     
+        - name: LOGGING
+          value: 'false'
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080

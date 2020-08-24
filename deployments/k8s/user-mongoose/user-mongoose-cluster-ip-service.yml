@@ -7,5 +7,5 @@ spec:
   selector:
     component: user-mongoose
   ports:
-  - port: 8001
+  - port: 8002
     targetPort: 8080

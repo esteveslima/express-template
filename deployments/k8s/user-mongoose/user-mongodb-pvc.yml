@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim             # object that requests k8s master for a storage(not the storage by itself)
 metadata:
-  name: user-service-mongodb-pvc
+  name: user-mongodb-pvc
 spec:
   accessModes:
     - ReadWriteOnce                     # assign pvc to be used by only one node

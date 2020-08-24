@@ -167,12 +167,13 @@ This project try to illustrate some usual structures, features and applications 
   
   remove image:		        docker rmi <image-name:tag>
   remove all images:		docker rmi -f $(docker images -a - q)
+  remove dangling images:     docker rmi $(docker images --filter 'dangling=true' -q --no-trunc)
   remove container:		docker rm <container-name>      
   remove all containers:		docker rm -vf $(docker ps -a -q)
   remove stopped containers:      docker system prune -a
 
   container logs:                 docker logs <container-name>
-  execute command in container:	docker exec --privileged -it <container-name> <command>
+  execute command in container:	docker exec --privileged -it <container-name> <command>         // may not work with replicas
   explore running container:	docker exec -it <container-name> </bin/bash or sh>
   copy container file:		docker cp <containerId>:/from/root/file/path /host/path/target      
   get container ip:		docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container-name>
@@ -273,7 +274,7 @@ This project try to illustrate some usual structures, features and applications 
 
   kubectl common CLI:
   ```bash
-    apply desired state to master:                  kubectl apply -f <folder/configFile.yml>
+    apply desired state to master:                  kubectl apply -f <folder/configFile.yml>          // apply --recursive flag to fild subfolders
 
     generic commands:
     kubectl <command> <object-type> [<object-names>] [<flags>]
@@ -294,7 +295,7 @@ This project try to illustrate some usual structures, features and applications 
     create secret manually:                         kubectl create secret generic <secret-name> --from-literal key=value 
     redirect local docker commands to VM docker:    eval $(minikube docker-env)
 
-    kubernetes ignore unchanged files, even when images are updated. So to update a modified image it's needed to apply some tag version and update imperativelly:
+    kubernetes ignore unchanged files, even when images are updated. So to update a modified image it is needed to apply some tag version and update imperativelly:
     modify deployment image manually:               kubectl set image deployment/<object-name> <container-name> = <fullImageNameTaggedWithVersion>
 
     imperative cleanup:

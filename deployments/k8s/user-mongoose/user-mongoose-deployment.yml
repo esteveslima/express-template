@@ -19,7 +19,7 @@ spec:
         - name: LOGGING
           value: 'false'
         - name: MONGO_URI                                                                         # env variable to connect with local mongodb in another deployment
-          value: mongodb://user-service-mongodb-cluster-ip-service:27017/user-service-mongodb     # referring to mongodb cluster ip service with default port
+          value: mongodb://user-mongodb-cluster-ip-service:27017/user-mongodb                     # referring to mongodb cluster ip service with default port
         #- name: MONGO_USER                                                                        # setting env variable from secret created imperatively
         #  valueFrom:
         #      secretKeyRef:

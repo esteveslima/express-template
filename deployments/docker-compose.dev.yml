@@ -19,11 +19,13 @@
 version: '3'
 services:
     nginx-server:                                                               # nginx server that will serve as entry point for this compose project        
+        image: esteveslima/nginx-server-image:tag
         build:
             context: ./nginx
             dockerfile: Dockerfile
         depends_on:                                                             # set an order of dependency for starting/stopping services
             - base-js
+            - base-ts
             - user-mongoose
         restart: always
         ports: 
@@ -38,43 +40,60 @@ services:
             - AUTOHEAL_START_PERIOD=15
         restart: always
     base-js:        
-        image: esteveslima/base-js-image:tag                               # tag image with username after build, enabling push to hub 
+        image: esteveslima/base-js-image:tag                                    # tag image with username after build, enabling push to hub 
         build:
-            context: ../base-js
+            context: ../templates/base-js
             dockerfile: Dockerfile.dev
         deploy:
             replicas: 2                                                         # create replicas, require --compatibility flag to work without docker swarm
             restart_policy:
                 condition: on-failure                                           # replaces restart policy
         volumes:                                                                # set a volume to 'sync' host files with container
-            - ../base-js:/service
-            - /service/node_modules
+            - ../base-js:/container
+            - /container/node_modules
         environment:
-            - LOGGING=false                
+            - LOGGING=false
+        restart: unless-stopped
+    base-ts:        
+        image: esteveslima/base-ts-image:tag                                
+        build:
+            context: ../templates/base-ts
+            dockerfile: Dockerfile.dev
+        deploy:
+            replicas: 2                                                         # create replicas, require --compatibility flag to work without docker swarm
+            restart_policy:
+                condition: on-failure                                           # replaces restart policy
+        volumes:                                                                # set a volume to 'sync' host files with container
+            - ../base-js:/container
+            - /container/node_modules
+        environment:
+            - LOGGING=false
+        restart: unless-stopped
     user-mongoose:        
         image: esteveslima/user-mongoose-image:tag                      
         build:
-            context: ../user-mongoose
+            context: ../templates/user-mongoose
             dockerfile: Dockerfile.dev
         deploy:
             replicas: 2
             restart_policy:
                 condition: on-failure
         volumes:
-            - ../user-mongoose:/service
-            - /service/node_modules
+            - ../user-mongoose:/container
+            - /container/node_modules
         depends_on:                                                             
             - mongo-database
         environment:
             - LOGGING=false
             - JWT_SECRET=userOverriden                                          # create env variable, which won't be replaced by dotenv node package
-            - MONGO_URI=mongodb://mongo-database:27017/user-service-mongodb     # local database from mongodb container                                    
+            - MONGO_URI=mongodb://mongo-database:27017/user-mongodb             # local database from mongodb container  
+        restart: unless-stopped                                  
     mongo-database:                                                             # mongo container for local database option
         image: mongo
         volumes:
-            - ../user-service-mongodb-storage:/data/db                          # set a volume for database data
+            - ../user-mongodb-storage:/data/db                                  # set a volume for database data
         environment:
-            - MONGO_INITDB_DATABASE=user-service-mongodb                        # creates the databased used by user-mongoose container
+            - MONGO_INITDB_DATABASE=user-mongodb                                # creates the databased used by user-mongoose container
             #- MONGO_INITDB_ROOT_USERNAME=user                                  # set auth credentials
             #- MONGO_INITDB_ROOT_PASSWORD=password
         restart: always
