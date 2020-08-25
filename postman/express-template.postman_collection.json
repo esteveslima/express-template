@@ -733,6 +733,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/authorization",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/authorization",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
+							"path": [
+								"authorization"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}

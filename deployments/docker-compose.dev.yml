@@ -49,7 +49,7 @@ services:
             restart_policy:
                 condition: on-failure                                           # replaces restart policy
         volumes:                                                                # set a volume to 'sync' host files with container
-            - ../base-js:/container
+            - ../templates/base-js:/container
             - /container/node_modules
         environment:
             - LOGGING=false
@@ -64,7 +64,7 @@ services:
             restart_policy:
                 condition: on-failure                                           # replaces restart policy
         volumes:                                                                # set a volume to 'sync' host files with container
-            - ../base-js:/container
+            - ../templates/base-js:/container
             - /container/node_modules
         environment:
             - LOGGING=false
@@ -79,7 +79,7 @@ services:
             restart_policy:
                 condition: on-failure
         volumes:
-            - ../user-mongoose:/container
+            - ../templates/user-mongoose:/container
             - /container/node_modules
         depends_on:                                                             
             - mongo-database

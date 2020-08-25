@@ -1,3 +1,3 @@
 FROM nginx as nginxBuilderStage
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY /config /etc/nginx/

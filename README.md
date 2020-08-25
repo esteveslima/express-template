@@ -308,7 +308,7 @@ This project try to illustrate some usual structures, features and applications 
 
 
 
-  referências:  
+  reference:  
   
   https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get
   https://kubernetes.io/docs/reference/kubectl/overview/
