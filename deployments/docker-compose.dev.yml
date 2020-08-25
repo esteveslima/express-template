@@ -27,6 +27,8 @@ services:
             - base-js
             - base-ts
             - user-mongoose
+        volumes:
+            - ./nginx/log:/var/log/nginx
         restart: always
         ports: 
             - "8080:80"
