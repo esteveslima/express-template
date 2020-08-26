@@ -17,9 +17,9 @@ export default () : express.Application => {
   // app.use(express.urlencoded({ extended: true }));
 
   // Security packages(may be unnecessary if defined in a reverse proxy server like nginx)
-  app.use(cors.setupCors());
-  app.use(helmet.setupHelmet());
-  app.use(xssClean.setupXssClean());
+  // app.use(cors.setupCors());
+  // app.use(helmet.setupHelmet());
+  // app.use(xssClean.setupXssClean());
   app.use(hpp.setupHpp());
   // app.use(rateLimiter.setupGeneralRateLimit());
 
