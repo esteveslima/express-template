@@ -21,7 +21,7 @@ RUN npm run build && \
     npm uninstall --save-dev
 
 # Checking container's health, using server status requisition inside the container
-HEALTHCHECK --interval=5m --timeout=10s --start-period=10s --retries=5 CMD curl -f http://localhost:8080/status || exit 1
+HEALTHCHECK --interval=5m --timeout=10s --start-period=10s --retries=5 CMD curl -f http://localhost:8080/public/status || exit 1
 
 # Exposes ports to make them available for inter-container communication(external communication require publish)
 EXPOSE 8080

@@ -11,6 +11,16 @@
 				{
 					"name": "aaa/imageUploadExample",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -41,6 +51,16 @@
 				{
 					"name": "aaa/emailExample",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"url": {
@@ -61,6 +81,16 @@
 				{
 					"name": "bbb/unregistredErrorExample",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"url": {
@@ -81,6 +111,16 @@
 				{
 					"name": "bbb/registredErrorExample",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"url": {
@@ -99,18 +139,19 @@
 					"response": []
 				},
 				{
-					"name": "/status",
+					"name": "/public/status",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_JS_ROUTE}}/status",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_JS_ROUTE}}/public/status",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
 							"port": "{{PORT}}{{BASE_JS_ROUTE}}",
 							"path": [
+								"public",
 								"status"
 							]
 						}
@@ -126,6 +167,16 @@
 				{
 					"name": "aaa/imageUploadExample",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -156,6 +207,16 @@
 				{
 					"name": "aaa/emailExample",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"url": {
@@ -176,6 +237,16 @@
 				{
 					"name": "bbb/unregistredErrorExample",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"url": {
@@ -196,6 +267,16 @@
 				{
 					"name": "bbb/registredErrorExample",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"url": {
@@ -214,18 +295,19 @@
 					"response": []
 				},
 				{
-					"name": "/status",
+					"name": "/public/status",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_TS_ROUTE}}/status",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{BASE_TS_ROUTE}}/public/status",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
 							"port": "{{PORT}}{{BASE_TS_ROUTE}}",
 							"path": [
+								"public",
 								"status"
 							]
 						}
@@ -239,7 +321,7 @@
 			"name": "user-mongoose",
 			"item": [
 				{
-					"name": "user/create",
+					"name": "user/public/create",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -479,7 +561,7 @@
 					"response": []
 				},
 				{
-					"name": "user/login",
+					"name": "user/public/login",
 					"event": [
 						{
 							"listen": "test",
@@ -524,7 +606,58 @@
 					"response": []
 				},
 				{
-					"name": "user/forgotPassword",
+					"name": "user/logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c8f0b223-b31d-47c0-9f70-6f10729f0d7c",
+								"exec": [
+									"pm.environment.set('TOKEN', pm.response.json().token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/auth/logout",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/public/forgotPassword",
 					"event": [
 						{
 							"listen": "test",
@@ -569,7 +702,7 @@
 					"response": []
 				},
 				{
-					"name": "user/restorePassword",
+					"name": "user/public/restorePassword",
 					"event": [
 						{
 							"listen": "test",
@@ -665,69 +798,19 @@
 					"response": []
 				},
 				{
-					"name": "user/logout",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "c8f0b223-b31d-47c0-9f70-6f10729f0d7c",
-								"exec": [
-									"pm.environment.set('TOKEN', pm.response.json().token);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/auth/logout",
-							"protocol": "http",
-							"host": [
-								"{{DOMAIN}}"
-							],
-							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
-							"path": [
-								"auth",
-								"logout"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/status",
+					"name": "/public/status",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/status",
+							"raw": "http://{{DOMAIN}}:{{PORT}}{{USER_MONGOOSE_ROUTE}}/public/status",
 							"protocol": "http",
 							"host": [
 								"{{DOMAIN}}"
 							],
 							"port": "{{PORT}}{{USER_MONGOOSE_ROUTE}}",
 							"path": [
+								"public",
 								"status"
 							]
 						}

@@ -27,11 +27,13 @@ services:
             - base-js
             - base-ts
             - user-mongoose
-        volumes:
+        volumes:                                                                # sync some nginx files with host
             - ./nginx/log:/var/log/nginx
+            #- ./nginx/ssl:/etc/nginx/ssl                                       # using this disables generating certificates in ssl folder with dockerfile
         restart: always
         ports: 
             - "8080:80"
+            - "8443:443"
     autoheal:                                                                   # useful package to restore unhealthy containers automatically        
         image: willfarrell/autoheal        
         volumes:

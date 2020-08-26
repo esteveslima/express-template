@@ -6,7 +6,7 @@ export default () : express.Router => {
   const router = express.Router();
 
   // Server status response
-  router.get('/status', (req, res/* , next */) : void => {
+  router.get('/public/status', (req, res/* , next */) : void => {
     res.status(200).json({ Status: true });
   });
 

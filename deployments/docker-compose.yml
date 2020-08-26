@@ -24,6 +24,7 @@ services:
         restart: always
         ports: 
             - "8080:80"
+            - "8443:443"
     autoheal:                                                                   # useful package to restore unhealthy containers automatically        
         image: willfarrell/autoheal        
         volumes:

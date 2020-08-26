@@ -9,7 +9,7 @@ module.exports = () => {
   const router = express.Router();
 
   // Server status response
-  router.get('/status', (req, res/* , next */) => {
+  router.get('/public/status', (req, res/* , next */) => {
     res.status(200).json({ Status: true });
   });
 
