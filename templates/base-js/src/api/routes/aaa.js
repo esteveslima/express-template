@@ -12,6 +12,6 @@ exports.joinToRouter = (mainRouter) => {
   aaaRouter.put('/', (req, res) => res.send('put'));
   aaaRouter.delete('/', (req, res) => res.send('delete'));
 
-  aaaRouter.post('/imageUploadExample', rateLimiter.setupFileUploadRateLimit(), aaa.imageUploadExample);
+  aaaRouter.post('/imageUploadExample', /* rateLimiter.setupFileUploadRateLimit(), */ aaa.imageUploadExample);
   aaaRouter.post('/emailExample', aaa.emailExample);
 };

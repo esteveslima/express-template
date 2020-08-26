@@ -20,12 +20,12 @@ module.exports = () => {
   // Cookie parser
   app.use(cookieParser.setupCookieParser());
 
-  // Security packages
+  // Security packages(may be unnecessary if defined in a reverse proxy server like nginx)
   app.use(cors.setupCors());
   app.use(helmet.setupHelmet());
   app.use(xssClean.setupXssClean());
   app.use(hpp.setupHpp());
-  app.use(rateLimiter.setupGeneralRateLimit());
+  // app.use(rateLimiter.setupGeneralRateLimit());
   // Input sanitizer validator
   app.use(sanitizer.setupMongoSanitizer());
 

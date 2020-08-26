@@ -16,12 +16,12 @@ module.exports = () => {
   app.use(express.json());
   // app.use(express.urlencoded({ extended: true }));
 
-  // Security packages
+  // Security packages(may be unnecessary if defined in a reverse proxy server like nginx)
   app.use(cors.setupCors());
   app.use(helmet.setupHelmet());
   app.use(xssClean.setupXssClean());
   app.use(hpp.setupHpp());
-  app.use(rateLimiter.setupGeneralRateLimit());
+  // app.use(rateLimiter.setupGeneralRateLimit());
 
   // Requests logger package
   app.use(morgan.setupMorgan());

@@ -10,7 +10,7 @@ const setupServer = async () : Promise<void> => {
   const httpServer = http.createServer(app);
   httpServer.listen(process.env.PORT, () => console.log(`${process.env.NODE_ENV} HTTP server, running on port ${process.env.PORT}`));
 
-  // Setup https server
+  // Setup https server(may be not needed, causing unecessary overhead)
   /* const httpsCertificate = {
     key: fs.readFileSync('./resources/ssl-tls/certificate.key', 'utf-8'),
     cert: fs.readFileSync('./resources/ssl-tls/certificate.crt', 'utf-8'),
