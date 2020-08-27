@@ -17,8 +17,8 @@ exports.authorization = (req, res, next) => {
   const token = authorizationHeader ? authorizationHeader.split(' ')[1] : req.cookies.token;
 
   try {
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decodedToken.id;
+    /* const decodedToken = */ jwt.verify(token, process.env.JWT_SECRET);
+    // req.userId = decodedToken.id;
     next();
   } catch (e) {
     return next(new ErrorResponse(ErrorResponse.errorCodes.UNHAUTORIZED, { token }));

@@ -167,7 +167,7 @@ Also provides api gateway structure examples with docker-compose + nginx as cont
 
           - ~~(TODO: improve configuration)~~
 
-      Besides the below configuration it is defined a http server that redirects all traffic to another https server, which the exposed ports are defined by `docker-compose.yml` and redirected to the default(80 and 443) nginx ports.      
+      Besides the above configuration it is defined a http server that redirects all traffic to another https server, which the exposed ports are defined by `docker-compose.yml` and redirected to the default(80 and 443) nginx ports.      
 
       This https server has routes for each back-end, which does a reverse proxy http request to the correspondent service removing the trailing route name and forwarding the client information. Every request uri defined at the back-end services must come with the respective trailing route name while using this nginx configuration due the only entry point for the system is through nginx and it is needed to have a distinction between the services that the client wants to access, categorizing this server as some sort of api gateway with centralized authentication.
       

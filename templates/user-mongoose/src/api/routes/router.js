@@ -17,9 +17,10 @@ module.exports = () => {
   router.all('/authorization', jwtAuth.authorization, (req, res) => {
     res.status(200).json({ Status: true });
   });
+  //
   // (The auth bellow should be enabled if nginx subrequest-authentication is not configured)
-  // Router authorization middleware, for routes not marked as public
-  // router.all(/^((?!\/public\/).)*$/i, jwtAuth.authorization, adjustMiddleware.appendUser);
+  // Authorization middleware followed by user append, for routes not marked as public
+  router.all(/^((?!\/public\/).)*$/i, /* jwtAuth.authorization, */ adjustMiddleware.appendUser);
   // Could revert logic and apply to all routes marked as private
   // router.all(/(\/private\/)/i, jwtAuth.authorization, adjustMiddleware.appendUser);
 
