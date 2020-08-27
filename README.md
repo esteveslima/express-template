@@ -6,6 +6,7 @@
 # Express template 
 
 This project try to illustrate some usual structures, features and applications examples to serve as future consultation and template for new projects.
+Also provides api gateway structure examples with docker-compose + nginx as container and kubernetes + nginx as ingress service. 
 
 <br/><br/>
 ## Project environmennt
@@ -13,9 +14,9 @@ This project try to illustrate some usual structures, features and applications 
 
 <br/><img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e3/ESLint_logo.svg/128px-ESLint_logo.svg.png" width="auto" height="32px">
 
-- [Eslint] - Dev-dependency Linter(Airbnb) for code standardization (vscode extension should also be installed) 
+- [Eslint] - Dev-dependency Linter(Airbnb base) for code standardization (vscode extension should also be installed) 
 
-  Configure linter in root folder to apply to all subdirectories, which are services that doesn't need this package
+  *To apply to all subdirectories(like in monorepo situation), configure linter in root folder
   ```npm
   npm init
   npm install eslint --save-dev
@@ -29,19 +30,32 @@ This project try to illustrate some usual structures, features and applications 
 
 - [VS Code debug] - With Nodemon
 
-  Setup a .vscode folder with configuration like in `.vscode/launch.json` should enable the debug mode in VS Code to be attached to a running process defined with `--inspect` in package.json scripts alongside nodemon. In this project, starting the server with `npm run dev` should enable nodemon and the inspector, on which can be attached the debug mode by clicking the play button in VS Code debug tab.
+  Setup a .vscode folder with configuration like in `.vscode/launch.json` should enable the debug mode in VS Code to be attached to a running process defined with `--inspect` in package.json scripts alongside nodemon. In this project, starting the server with `npm run dev` should enable nodemon wathcing source folder and the inspector on a random port, on which can be attached the debug mode by clicking the play button in VS Code debug tab.
 
 
 <br/><img src="https://miro.medium.com/max/3416/1*Txf8ugHH_MlHPM8JU6hT5w.jpeg" width="auto" height="32px">
 
-- [Postman] - For testing requests
+- [Postman] - Testing requests
   
-  - Saving environment and collections
-  - Environment and Collection can be easily imported for testing or documentation purposes.  
-  - Environment setup with common variables(like hosts/token).
+  - Saving environment and collection, which can be easily imported for testing or documentation purposes.  
+  - Environment setup with common variables, making easy modifying host, port, route and token.
   - Authorization setup in headers configuration and automatically saved in the environment with the use of scripts in stratetic requests(like login/logout).
 
-    - ~~***TODO***~~: Find a way to do load/stress testing on server using postman or any other tool.
+- [Siege] - for stress testing
+  
+  Useful tool for stress testing urls with performance feedback.
+
+  ```bash
+  sudo apt-get install siege
+  ```
+
+  Common usage:  
+
+  ```bash
+  siege --verbose --concurrent=<concurrent_number> --reps=<requests_number> <url>
+  ```
+  
+    - ~~***TODO***~~: Find load/stress/performance robust testing tool.(maybe jmeter?)
 
 
 
@@ -52,35 +66,54 @@ This project try to illustrate some usual structures, features and applications 
   
   - ~~***TODO***~~: 
     - Provide examples of unit testing with [mocha], [chai] and [sinon] as dev dependencies packages
-    - Define a helper file inside config(maybe .env?) to map external urls to variables, making things easy in multiple containers and future configurations 
+    - Cron job examples
+    - Study pub/sub and dependency injection architecture usecases and a refactor possibility in this projects
 
   <br/><br/>
-  - **base-js**: This service contains only basic functionalities and another projects/examples should extend it's structure.
+  - **base-js**: This service contains only basic functionalities and another projects/examples should extend it's structure(or base-ts structure preferrebly).
   
     - ***Contain simple examples***: simple examples covering routing and controllers(upload and email examples, in addition to errors demonstration);    
-    - ***HTTPS Structure***: Structure provided, ~~but not in use~~, alongside http server at `index.js`;
-      - ~~***TODO***~~: Understand better the generation of valid ssl certificates(self signed certificates using letsencrypt).
+    - ***HTTPS Structure***: Structure provided alongside http server at `index.js`. Not used because https connection can be handled by a reverse proxy server(nginx) and another encrypted connection between proxy and back-end may cause unnecessary resources consuption from the servers. So this may be enabled when as a standalone server and, when with a reverse proxy, block access to external world leaving the http connection with the proxy;
+      - ~~***TODO***~~: Generate valid ssl certificates(using letsencrypt) instead of self signed certificates.
     - ***Decoupled packages***: they are simply imported and used, all it's configurations are made inside a proper file at `/src/services/`;
-    - ***Loader structure***: a more modular way to import and setup modules at `/src/loaders/`, which are imported at `index.js` before setup servers and start listening;
+    - ***Loader structure***: a more modular way to import and setup modules at `/src/loaders/`, which are imported at `/src/index.js` before setup servers and start listening;
     - ***3 layer architecture***: clear separation of routing, business logic in controllers and data access in dao with their models. Middlewares added to provide request adjust and validation;
     - ***Router construction***: express router demonstration with subrouters at `/src/api/routes/`, with server status check and custom not found response;
     - ***Nodemon***: [nodemon] dev-dependency which can be used with vscode debug configuring `package.json` scripts.dev with `--inspect`. ~~Also configured to modify node_env=development for testing in scripts.dev~~;
-    - ***Environment variables***: setup with [dotenv] package at file `/src/services/env/dotenv.js`, template configuration file at `/src/config/.env`. Enables configuration of ports, node_env, logging, email credentials, etc. The configuration file ***should not be commited with sensitive information***;    
+    - ***Environment variables***: setup with [dotenv] package at file `/src/services/env/dotenv.js`, template configuration file at `/config/.env`. Enables configuration of ports, node_env, logging, email credentials, etc. The configuration file ***should not be commited with sensitive information***;    
     - ***Loggers***: [morgan] package at `/src/services/log/morgan.js` responsible for logging requests and [winston] package at `/src/services/log/winston.js` responsible for another kinds of logging. Logs can be enabled/disabled at .env configuration file
     - ***Centralized error handling***: file handler `/src/services/error/error-handler.js` put at the bottom of node call stack that handles possible errors, tracing errors for debugging using the package [stack-trace] at `/src/services/error/stack-trace.js` and logging with winston;
     - ***Standartized errors***: possibility to structure error responses at file `/src/services/error/structure/error-codes.js` and call them manually. Also possible to test unexpected errors at file `/src/services/error/structure/error-response.js` in runtime and build a proper error response;
     - ***Easy async handling***: drying code with async handler at file `/src/services/async/async-handler.js` dispensing the use of try/catch blocks in async functions at files like `/src/api/controllers/*`. Using function at `/src/services/async/wrap-async.js` it's possible to wrap async handler in every function inside the file;
-    - ***Security***: few packages like [cors], [helmet], [hpp], [express-rate-limit], [xss-clean] to apply some security with headers or as middleware at file `/src/services/security/*`;
-      - ~~***TODO***~~: Understand better these security headers for proper integration with front-end applications and servers like Nginx.
+    - ***Security***: few packages like [cors], [helmet], [hpp], [express-rate-limit], [xss-clean] to apply some security with headers or as middleware at file `/src/services/security/*`. ps: May be disabled due to an intermediary element(nginx container/ingress) that already configures these features;      
     - ***Email template***: simple email example using [nodemailer] at `/src/services/email/nodemailer.js` which can be improved to send customized html emails with dynamic data;
     - ***Upload template***: simple upload example using [formidable] at `/src/services/upload/formidable.js` which can be improved to support multiple files in custom directories. Currently able to validate uploaded files names and MIMEs, separating them as accepted or rejected;  
     
+  <br/><br/>
+  - **base-ts**: Same as base-js, modified to **Typescript**.
   
+    Changing `.js` to `.ts` when migrating a project can be done executing the following script at the root folder:
+    ```bash
+    find ./src -name "*.js" -exec sh -c 'mv "$0" "${0%.js}.ts"' {} \;
+    ```
+
+    Typescript projects require some extra configuration and this project handle it with:
+
+    - ***Essential dev packages***: [typescript] to transpile, [@types/node] and [@types/express] to enable essencial properties in editor;
+    - ***Eslint config***: some new configurations for `eslintrc.json` with typescript. Also @typescript-eslint/(parser and eslint-plugin) automatically installed;
+    - ***Tsconfig***: Basic configuration for transpiling which should be aiming for the latests features and versions of the language;
+    - ***New Scripts***: The code need to be transpiled to javascript code, so a build script`(npm run build)` was created to transpile typescript code(to a `dist` folder) with the command `tsc`. The regular start script is executed with the javascript code inside the dist folder;
+    - ***Auto reload without transpiling***: Using [ts-node] with [nodemon] it's possible to run `npm run dev` and test just like a javascript project, without needing to transpile first, also it's possible to attach the debugger;
+    
+    A typescript project is commonly useful because of the types definition, but variables and functions don't need to specify the type every time due the type inference which tests the code and apply a type automatically if not defined.
+
+
+
   
   <br/><br/>
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/MongoDB_Logo.svg/220px-MongoDB_Logo.svg.png" width="auto" height="32px">
 
-  - **user-mongoose**: Example service using ***MongoDB*** alongside [mongoose] for user data manipulation, authentication and authorization.
+  - **user-mongoose (js)**: Example service using ***MongoDB*** with [mongoose] for user data manipulation, authentication and authorization.
   
     ~~This service requires the creation of a mongodb cluster(local or remote) before running.~~
   
@@ -91,7 +124,7 @@ This project try to illustrate some usual structures, features and applications 
     - ***Mongoose model***: mongoose user model at `/src/models/*` with useful examples for validation using regex and data transforming. Schema middleware example used for password encryption using [bcrypt] before storing in database. Schema methods definition example used for validate incoming passwords, encrypting them and comparing;
     - ***Custom mongoose errors handling***: testing unexpected mongoose errors at `/src/services/error/structure/error-response.js` and providing proper reponses with new registred errors at `/src/services/error/structure/error-codes.js` that are modified to provide dynamic feedback of with which field/value the error was triggered;
     - ***Mongo input sanitize***: added package [express-mongo-sanitize] that provides extra security for mongoose, disabling inputs with forbidden characters;
-    - ***Authentication/Authorization using tokens***: auth made with [jsonwebtoken] package at `/src/services/auth/jwt.js` using configuration at `/src/config/.env` file. The authentication is made through login/logout function in controller file `/src/api/controllers/auth.js` and authorization is required in every route that not contains the `/public/` keyword at `/src/api/routes/router.js`. Postman auth requests automatically stores authorization tokens for future private requests;
+    - ***Authentication/Authorization using tokens***: auth made with [jsonwebtoken] package at `/src/services/auth/jwt.js` using configuration at `/config/.env` file. The authentication is made through login/logout function in controller file `/src/api/controllers/auth.js` and authorization is required in every route that not contains the `/public/` keyword at `/src/api/routes/router.js`. Postman auth requests automatically stores authorization tokens for future private requests;
     - ***Cookie integration***: package [cookie-parser] that enables login/logout to generates/removes cookies with authorization token, at file `/src/services/parser/cookie-parser.js` used in `/src/api/controllers/auth.js` login/logout functions;
     - ***Restore user password example***: functionality that sends an email to user containing a token that can be used to restore user's missing password. The implemented approach in `forgot password` and `restore password` functions at file `/src/api/controllers/auth.js` dont use any extra field in the database, instead it generates a token with user's email in the payload with a secret that is composed by the client ip and email(could be improved through encryption and other strategies), that way the token can only be used for that specific email for the designed user(ip address) within expiration time.;
     - ***Simple user data manipulation***: simple crud functions for user data and user utilities at `/src/api/controllers/user.js`;
@@ -119,17 +152,45 @@ This project try to illustrate some usual structures, features and applications 
 
 <br/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/220px-Nginx_logo.svg.png" width="auto" height="32px">      
  
- - [Nginx] - Load balance / Reverse proxy server
+ - [Nginx] - Load balance / Reverse proxy server API Gateway
        
-      `/deployments/nginx` folder has a Dockerfile configuration that creates a nginx image and copies the `/nginx/nginx.conf` inside the container with the desired configuration. The current `.conf` file configure a load balancer for each service defined in `docker-compose.yml` with reverse proxy routing.
+      `/deployments/nginx` folder has a Dockerfile configuration that creates a nginx image, copying the `/nginx/config/*` files inside the container with the desired configuration and generates a self signed ssl certificate to the `/etc/nginx/ssl` folder inside the container. 
       
-      Building manual load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `/nginx/nginx.conf` file.
+      The current `nginx.conf` file defines the worker's capacity and loads the following ~~incomplete~~ configurations which may be improved:
+
+        - basic:    setup some basic configurations like buffer sizes, timeouts, etc;
+        - cache:    currently disables all cache;
+        - gzip:     setup some gzip configuration and enable compression for some files;
+        - log:      define log directories, but may also configure custom logging;
+        - security: configure default security headers, cors and rate limit for requests;
+        - ssl:      defines certificates directory and some configurations.
+
+          - ~~(TODO: improve configuration)~~
+
+      Besides the below configuration it is defined a http server that redirects all traffic to another https server, which the exposed ports are defined by `docker-compose.yml` and redirected to the default(80 and 443) nginx ports.      
+
+      This https server has routes for each back-end, which does a reverse proxy http request to the correspondent service removing the trailing route name and forwarding the client information. Every request uri defined at the back-end services must come with the respective trailing route name while using this nginx configuration due the only entry point for the system is through nginx and it is needed to have a distinction between the services that the client wants to access, categorizing this server as some sort of api gateway with centralized authentication.
       
-      Using nginx as ingress crontroller for kubernetes, but it's configuration is made within it's ingress `.yml` file with another syntax.
+      These reverse proxied routes have load balance with health check configured by their upstreams, which due the shared connection are referenced by the service name defined at `docker-compose.yml` and don't need to specify the replicas number or names.
+
+      Also, every request not marked as `/public/` in the uri passes through a subrequest authentication to the `user-mongoose` server upstream, that validates the authentication header with the jwt token.
+
+      PS:
+
+        - Building manual load balancing, each service container has to remove the `--publish` option from `docker run` and provide the container IP address to the upstream servers in `nginx.conf` file.
+      
+        - Using nginx as ingress crontroller for kubernetes, but it's configuration is made within `ingress-service.yml` file with another syntax.
 
       - ~~***TODO***~~: 
-        - Understand better nginx configurations for reverse proxy, load balancing, headers and ssl setup.
-        - API gateway setup with nginx.
+        - Generate valid ssl/tls certificate
+        -	Improve configurations for cache, gzip and security headers
+        -	Firewall
+        -	GeoIP
+        -	Websockets
+        -	Bandwidth limit
+        -	Video streaming
+        -	server push(http2)
+        - another useful dynamic modules
 
 
 
@@ -366,6 +427,7 @@ This project try to illustrate some usual structures, features and applications 
 [Eslint]: <https://eslint.org/>
 [VS Code debug]: <https://code.visualstudio.com/docs/editor/debugging>
 [Postman]: <https://www.postman.com/>
+[Siege]: <https://github.com/JoeDog/siege>
 
 [mocha]:<https://mochajs.org/>
 [chai]:<https://www.chaijs.com/>
@@ -382,6 +444,12 @@ This project try to illustrate some usual structures, features and applications 
 [xss-clean]:<https://www.npmjs.com/package/xss-clean>
 [nodemailer]:<https://www.npmjs.com/package/nodemailer>
 [formidable]:<https://www.npmjs.com/package/formidable>
+
+[typescript]:<https://www.typescriptlang.org/>
+[ts-node]:<https://www.npmjs.com/package/ts-node>
+[@types/node]:<https://www.npmjs.com/package/@types/node>
+[@types/express]:<https://www.npmjs.com/package/@types/express>
+
 
 [express-mongo-sanitize]:<https://www.npmjs.com/package/express-mongo-sanitize>
 [mongoose]:<https://www.npmjs.com/package/mongoose>
