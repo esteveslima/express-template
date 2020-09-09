@@ -13,8 +13,8 @@ exports.authenticate = (userId) => {
 // Verifies jwt embbeded on header or cookie for user authorization
 exports.authorization = (req, res, next) => {
   // Pattern as "Bearer JSON_WEB_TOKEN" in the headers or {"token": JSON_WEB_TOKEN} in the cookie
-  const { authorizationHeader } = req.headers;
-  const token = authorizationHeader ? authorizationHeader.split(' ')[1] : req.cookies.token;
+  const { authorization } = req.headers;
+  const token = authorization ? authorization.split(' ')[1] : req.cookies.token;
 
   try {
     /* const decodedToken = */ jwt.verify(token, process.env.JWT_SECRET);

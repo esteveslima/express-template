@@ -1,7 +1,7 @@
 const express = require('express');
 const user = require('../controllers/user');
 const validateMiddleware = require('../middlewares/validate-request');
-const rateLimiter = require('../../services/security/rate-limit');
+// const rateLimiter = require('../../services/security/rate-limit');
 
 exports.joinToRouter = (mainRouter) => {
   const userRouter = express.Router();
