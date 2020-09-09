@@ -359,8 +359,7 @@ Also provides api gateway structure examples with docker-compose + nginx as cont
     redirect local docker commands to VM docker:    eval $(minikube docker-env)
 
     kubernetes ignore unchanged files, even when images are updated. So to update a modified image it is needed to apply some tag version and update imperativelly:
-    modify deployment image manually:               kubectl set image deployment/<object-name> <container-name> = <fullImageNameTaggedWithVersion>
-
+    modify deployment image manually:               kubectl set image deployments/<object_metadata_name> <template_spec_container_name> = <image_name_pushed_to_hub:tagname>    
     imperative cleanup:
     kubectl delete deployments --all
     kubectl delete services --all

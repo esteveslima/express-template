@@ -54,10 +54,10 @@ before_install:
   # docker login
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin     # login with registered environment variables in travis ci project
   # build 'test' version individually or with docker-compose(not in use)
-  # - docker build -t <test_container_tag_name> -f <dockerfile_file_path> <context>   # test_container_tag_name in format user/container-test:tag(latest)
+  # - docker build -t <test_image_tag_name> -f <dockerfile_file_path> <context>       # test_image_tag_name in format user/image-test:tag(latest)
 
 script:
-  # - docker run <test_container_tag_name> npm test -- --coverage                     # run test, "-- --coverage" provides a signal with test result(handle test watch mode)
+  # - docker run <test_image_tag_name> npm test -- --coverage                         # run test, "-- --coverage" provides a signal with test result(handle test watch mode)
   - echo "skipping tests..."
 
 deploy:
