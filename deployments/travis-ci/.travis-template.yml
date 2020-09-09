@@ -15,7 +15,7 @@
 #   - helm init --service-account tiller --upgrade
 #   - install nginx ingress from https://kubernetes.github.io/ingress-nginx/deploy/ using helm
 # requirements for Travis:
-# - GCP Service Account credentials(GCP console -> IAM & Admin/Service accounts -> Create service accounts(GKE engine admin) -> ~create json key~ -> rename file before the next steps)
+# - GCP Service Account credentials(GCP console -> IAM & Admin/Service accounts -> Create service accounts(Kubernetes Engine Admin) -> ~create json key~ -> rename file before the next steps)
 #   Encrypt Service account credentials using travis cli(which requires ruby) and tie it to travis. 
 #   Perform this process using a docker container . Following the commands bellow in project's folder after putting the json credentials file inside it:
 #   - docker run -it -v $(pwd):/container ruby:2.3 sh                                 #(start sh inside created container with ruby image)
