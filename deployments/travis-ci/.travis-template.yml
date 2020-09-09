@@ -26,11 +26,13 @@
 #   - **DELETE <service_credentials_name>.json original credentials**, leaving only the encrypted(.enc) result from the last command, which needs to be commited to the repository
 #   - exit
 # - Register DOCKER_USERNAME and DOCKER_PASSWORD environment variables in travis ci project -> settings
+# - Enable and sync git project at Travis
 #
 # - **replace names in this file accordingly and rename this file to '.travis.yml', moving it along the other required files(deploy script) to root folder before commit changes**
 
 
-sudo: required                                                                        # required to use docker
+sudo: required
+language: node_js                                                                        # required to use docker
 services:
   - docker                                                                            # require docker to be installed when build starts
 env:
@@ -54,8 +56,9 @@ before_install:
   # build 'test' version individually or with docker-compose(not in use)
   # - docker build -t <test_container_tag_name> -f <dockerfile_file_path> <context>   # test_container_tag_name in format user/container-test:tag(latest)
 
-#script:
+script:
   # - docker run <test_container_tag_name> npm test -- --coverage                     # run test, "-- --coverage" provides a signal with test result(handle test watch mode)
+  - echo "skipping tests..."
 
 deploy:
   provider: script                                                                    # running own scripts due travis doesn't have a built in script to deploy to kubernetes

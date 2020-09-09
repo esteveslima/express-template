@@ -16,6 +16,8 @@ before_install:
   - gcloud config set compute/zone us-central1-c
   - gcloud container clusters get-credentials my-first-cluster-1
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+script:
+   - echo "skipping tests..."
 deploy:
   provider: script
   script: bash ./gke-deploy.sh
