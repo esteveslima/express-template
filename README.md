@@ -169,7 +169,7 @@ Also provides api gateway structure examples with docker-compose + nginx as cont
 
       Besides the above configuration it is defined a http server that redirects all traffic to another https server, which the exposed ports are defined by `docker-compose.yml` and redirected to the default(80 and 443) nginx ports.      
 
-      This https server has routes for each back-end, which does a reverse proxy http request to the correspondent service removing the trailing route name and forwarding the client information. Every request uri defined at the back-end services must come with the respective trailing route name while using this nginx configuration due the only entry point for the system is through nginx and it is needed to have a distinction between the services that the client wants to access, categorizing this server as some sort of api gateway with centralized authentication.
+      This https server has routes for each back-end, which does a reverse proxy http request to the correspondent service removing the leading route name and forwarding the client information. Every request uri defined at the back-end services must come with the respective leading route name while using this nginx configuration due the only entry point for the system is through nginx and it is needed to have a distinction between the services that the client wants to access, categorizing this server as some sort of api gateway with centralized authentication.
       
       These reverse proxied routes have load balance with health check configured by their upstreams, which due the shared connection are referenced by the service name defined at `docker-compose.yml` and don't need to specify the replicas number or names.
 
@@ -273,6 +273,8 @@ Also provides api gateway structure examples with docker-compose + nginx as cont
   build and run compose containers:   docker-compose up [options] [<services>]
     options:  --build       ->  build images
               --detach      ->  run on background
+              --no-start    ->  create containers without starting
+              --scale <service_name>=0    -> up all containers except service_name
 
   start/stop compose containers:      docker-compose <start/stop> [<services>]
   pause/unpause compose containers:   docker-compose <pause/unpause> [<services>]
@@ -381,6 +383,18 @@ Also provides api gateway structure examples with docker-compose + nginx as cont
     - Cloud provisioners examples for deployment    
     - Test distributed nodes and multi clusters
 
+<br/><img src="https://kubernetes.io/images/favicon.png" width="auto" height="64px">
+
+ - [Travis] - Free CI for Open source  
+
+  Travis CI is a free tool of continuous integration for open source projects, cloning the repository after a push trigger and running a series of tasks to test and build the code. It requires to sync git and repository with travis account and build a `.travis.yml` file with the build steps. A commented template of this build with GKE is provided at `/deployments/.travis.yml`.
+
+
+
+
+
+
+
 
 
 
@@ -470,3 +484,5 @@ Also provides api gateway structure examples with docker-compose + nginx as cont
 [Docker]: <https://www.docker.com/>
 [docker-compose]: <https://docs.docker.com/compose/>
 [Nginx]: <https://www.nginx.com/>
+
+[Travis]: <https://travis-ci.org/>

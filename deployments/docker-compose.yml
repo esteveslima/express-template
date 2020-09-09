@@ -13,7 +13,7 @@
 version: '3'
 services:
     nginx-server:                                                               # nginx server that will serve as entry point for this compose project        
-        image: esteveslima/nginx-server-image:tag
+        image: esteveslima/nginx-server-image:latest
         build:
             context: ./nginx
             dockerfile: Dockerfile
@@ -35,7 +35,7 @@ services:
             - AUTOHEAL_START_PERIOD=15
         restart: always
     base-js:        
-        image: esteveslima/base-js-image:tag                                    # tag image with username after build, enabling push to hub 
+        image: esteveslima/base-js-image:latest                                 # tag image with username after build, enabling push to hub 
         build:
             context: ../templates/base-js
             dockerfile: Dockerfile
@@ -47,7 +47,7 @@ services:
             - LOGGING=false
         restart: always
     base-ts:        
-        image: esteveslima/base-ts-image:tag                                    
+        image: esteveslima/base-ts-image:latest                                    
         build:
             context: ../templates/base-ts
             dockerfile: Dockerfile
@@ -59,7 +59,7 @@ services:
             - LOGGING=false
         restart: always
     user-mongoose:        
-        image: esteveslima/user-mongoose-image:tag                      
+        image: esteveslima/user-mongoose-image:latest                      
         build:
             context: ../templates/user-mongoose
             dockerfile: Dockerfile
@@ -92,10 +92,6 @@ services:
             
 # Possible useful definitions(currently may be not in use)
 #
-#   - build: network
-#   - command
-#   - depends_on
-#   - deploy
 #   - env_file
 #   - logging
 #   - volumes: long syntax

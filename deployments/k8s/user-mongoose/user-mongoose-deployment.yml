@@ -14,7 +14,7 @@ spec:
     spec:      
       containers:
       - name: user-mongoose-container
-        image: esteveslima/user-mongoose-image:tag
+        image: esteveslima/user-mongoose-image:latest
         env:
         - name: LOGGING
           value: 'false'

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: base-ts-container             
-        image: esteveslima/base-ts-image:tag        
+        image: esteveslima/base-ts-image:latest        
         env:                                     
         - name: LOGGING
           value: 'false'

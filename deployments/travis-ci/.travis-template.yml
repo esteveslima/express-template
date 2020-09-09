@@ -1,0 +1,64 @@
+# Travis CI configuration example for deploying in GKE with github in addition to Helm + Nginx Ingress Controller(tests not implemented yet)
+# requirements for GKE:
+# - GCP project with GKE instance configured
+# - Setup GCloud inside project's context using the same commands used in this .yml file in GCP Shell:
+#   - gcloud config set project <GCP_project_id>
+#   - gcloud config set compute/zone <GKE_configured_cluster_location>    
+#   - gcloud container clusters get-credentials <GKE_container_name> 
+# - If necessary, setup kubernetes secrets imperativelly with GCP Shell:
+#   - kubectl create secret generic <secret_name> --from-literal <KEY=VALUE>
+# - Using the GKE Shell instance, install Helm(from script installation) from https://helm.sh/docs/intro/install/#Script to manage third party objects(in this case nginx ingress) 
+#   - Don't run 'helm init' right after this installation.
+#   - Create a Service account and a ClusterRoleBinding to that account, which auths tiller modifications to a cluster:
+#     - kubectl create serviceaccount --namespace kube-system tiller
+#     - kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+#   - helm init --service-account tiller --upgrade
+#   - install nginx ingress from https://kubernetes.github.io/ingress-nginx/deploy/ using helm
+# requirements for Travis:
+# - GCP Service Account credentials(GCP console -> IAM & Admin/Service accounts -> Create service accounts(GKE engine admin) -> ~create json key~ -> rename file)
+#   Encrypt Service account credentials using travis cli(which requires ruby) and tie it to travis. 
+#   Perform this process using a docker container . Following the commands bellow in project's folder after putting the json credentials file inside it:
+#   - docker run -it -v $(pwd):/container ruby:2.3 sh                                 #(start sh inside created container with ruby image)
+#   - cd container
+#   - gem install travis
+#   - travis login                                                                    #(login account on github)
+#   - travis encrypt-file <service_credentials_name>.json -r <git_user_with_repo>     #(case sensitive git_user_with_repo in format: user/repo)
+#   - **DELETE <service_credentials_name>.json original credentials**, leaving only the encrypted(.enc) result from the last command*, which needs to be commited to the repository
+#   - exit
+# - Register DOCKER_USERNAME and DOCKER_PASSWORD environment variables in travis ci project -> settings
+#
+# - **replace names in this file accordingly and rename this file to '.travis.yml', moving it along the other required files(deploy script) to root folder before commit changes**
+
+
+sudo: required                                                                        # required to use docker
+services:
+  - docker                                                                            # require docker to be installed when build starts
+env:
+  global:
+    - GIT_SHA=$(git rev-parse HEAD)                                                   # assign current commit sha to a environment variable in travis(for containers tagging)
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1                                                 # disables user input prompts for gcloud cli commands, speeding up the process
+before_install:
+  # configure credentials decrypt
+  - <command_result_from_encryption_step>                                             # command result from Encryption step(decrypts the encrypted credentials generated in encryption step)  
+  # installations for google cloud
+  - curl https://sdk.cloud.google.com | bash > /dev/null;                             # download google sdk and install locally inside instance assigned by travis ci
+  - source $HOME/google-cloud-sdk/path.bash.inc                                       # setup some configuration to source command
+  - gcloud components update kubectl                                                  # install kubectl
+  # setup GKE cluster info
+  - gcloud auth activate-service-account --key-file <service_credentials_name>.json   # provide credentials to google cloud sdk(file resulted and renamed from encryption step)  
+  - gcloud config set project <GCP_project_id>
+  - gcloud config set compute/zone <GKE_configured_cluster_location>    
+  - gcloud container clusters get-credentials <GKE_container_name>
+  # docker login
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin     # login with registered environment variables in travis ci project
+  # build 'test' version individually or with docker-compose(not in use)
+  # - docker build -t <test_container_tag_name> -f <dockerfile_file_path> <context>   # test_container_tag_name in format user/container-test:tag(latest)
+
+#script:
+  # - docker run <test_container_tag_name> npm test -- --coverage                     # run test, "-- --coverage" provides a signal with test result(handle test watch mode)
+
+deploy:
+  provider: script                                                                    # running own scripts due travis doesn't have a built in script to deploy to kubernetes
+  script: bash ./gke-deploy.sh                                                        # script that runs the deploy script
+  on:
+    branch: master                                                                    # run script only for branch master updates
