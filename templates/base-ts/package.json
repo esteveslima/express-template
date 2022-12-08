@@ -24,7 +24,7 @@
     "typescript": "^4.0.2"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express-rate-limit": "^5.1.3",
